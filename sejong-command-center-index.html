@@ -251,6 +251,49 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 .st-badge.pending { background: var(--slate-bg); color: var(--slate); }
 .st-dot { width: 6px; height: 6px; border-radius: 50%; }
 
+/* ── GLOW ANIMATIONS ── */
+@keyframes glow-progress {
+  0%,100% { box-shadow: 0 0 4px 1px rgba(232,119,34,0.5); opacity:1; transform:scale(1); }
+  50%      { box-shadow: 0 0 10px 4px rgba(232,119,34,1), 0 0 20px 6px rgba(232,119,34,0.6); opacity:1; transform:scale(1.4); }
+}
+@keyframes glow-planned {
+  0%,100% { box-shadow: 0 0 4px 1px rgba(194,139,10,0.5); opacity:1; transform:scale(1); }
+  50%      { box-shadow: 0 0 10px 4px rgba(255,200,0,1), 0 0 20px 6px rgba(255,200,0,0.6); opacity:1; transform:scale(1.4); }
+}
+@keyframes glow-done {
+  0%,100% { box-shadow: 0 0 4px 1px rgba(30,145,80,0.5); opacity:1; transform:scale(1); }
+  50%      { box-shadow: 0 0 10px 4px rgba(0,255,120,0.9), 0 0 20px 6px rgba(0,255,120,0.5); opacity:1; transform:scale(1.3); }
+}
+@keyframes glow-badge-progress {
+  0%,100% { box-shadow: 0 0 0px rgba(232,119,34,0); }
+  50%      { box-shadow: 0 0 10px 3px rgba(232,119,34,0.7), 0 0 20px 6px rgba(232,119,34,0.3); }
+}
+@keyframes glow-badge-planned {
+  0%,100% { box-shadow: 0 0 0px rgba(255,200,0,0); }
+  50%      { box-shadow: 0 0 10px 3px rgba(255,200,0,0.7), 0 0 20px 6px rgba(255,200,0,0.3); }
+}
+@keyframes glow-badge-done {
+  0%,100% { box-shadow: 0 0 0px rgba(0,255,120,0); }
+  50%      { box-shadow: 0 0 10px 3px rgba(0,255,120,0.6), 0 0 20px 6px rgba(0,255,120,0.25); }
+}
+@keyframes glow-step-active {
+  0%,100% { box-shadow: 0 0 4px rgba(232,119,34,0.4); }
+  50%      { box-shadow: 0 0 14px 4px rgba(232,119,34,0.95), 0 0 28px 8px rgba(232,119,34,0.45); }
+}
+
+/* 상태 뱃지 발광 */
+.st-badge.progress { animation: glow-badge-progress 1.8s ease-in-out infinite; }
+.st-badge.planned  { animation: glow-badge-planned  2.4s ease-in-out infinite; }
+.st-badge.done     { animation: glow-badge-done     2.8s ease-in-out infinite; }
+
+/* 상태 점 발광 */
+.st-badge.progress .st-dot { animation: glow-progress 1.8s ease-in-out infinite; }
+.st-badge.planned  .st-dot { animation: glow-planned  2.4s ease-in-out infinite; }
+.st-badge.done     .st-dot { animation: glow-done     2.8s ease-in-out infinite; }
+
+/* 진행 중 스텝박스 발광 */
+.step-box.s-active { animation: glow-step-active 1.8s ease-in-out infinite; }
+
 /* ── DETAIL PANEL ── */
 .det-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
 .det-hdr h2 { font-size: 14px; font-weight: 900; color: var(--navy); }
