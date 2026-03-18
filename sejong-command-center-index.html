@@ -3024,15 +3024,14 @@ function renderHonor(){
 }
 /* ── 섹션별 색상 팔레트 ── */
 const SEC_PALETTE = {
-  office:   { bg:'rgba(30,60,120,0.35)',  border:'rgba(60,120,230,0.4)',  accent:'#4A90D9', label:'분양사무실' },
-  agency:   { bg:'rgba(120,40,10,0.35)',  border:'rgba(230,119,34,0.4)',  accent:'#E87722', label:'대대행계약' },
-  md:       { bg:'rgba(10,100,50,0.30)',  border:'rgba(30,180,100,0.4)',  accent:'#2ECC71', label:'분양MD' },
-  issue:    { bg:'rgba(150,20,20,0.30)',  border:'rgba(220,60,60,0.4)',   accent:'#E74C3C', label:'이슈관리' },
-  schedule: { bg:'rgba(80,20,120,0.30)',  border:'rgba(160,80,220,0.4)',  accent:'#9B59B6', label:'일정관리' },
-  docs:     { bg:'rgba(10,80,80,0.30)',   border:'rgba(30,180,180,0.4)',  accent:'#1ABC9C', label:'자료·네트워크' },
+  office:   { bg:'rgba(74,144,217,0.06)',  border:'rgba(74,144,217,0.20)',  accent:'#4A90D9', dim:'rgba(74,144,217,0.5)',  icon:'🏢', label:'분양사무실' },
+  agency:   { bg:'rgba(232,119,34,0.06)',  border:'rgba(232,119,34,0.20)',  accent:'#E87722', dim:'rgba(232,119,34,0.5)',  icon:'📝', label:'대대행계약' },
+  md:       { bg:'rgba(46,204,113,0.06)',  border:'rgba(46,204,113,0.20)',  accent:'#2ECC71', dim:'rgba(46,204,113,0.5)',  icon:'🏗', label:'분양MD' },
+  issue:    { bg:'rgba(231,76,60,0.06)',   border:'rgba(231,76,60,0.20)',   accent:'#E74C3C', dim:'rgba(231,76,60,0.5)',   icon:'🔔', label:'이슈관리' },
+  schedule: { bg:'rgba(155,89,182,0.06)',  border:'rgba(155,89,182,0.20)',  accent:'#9B59B6', dim:'rgba(155,89,182,0.5)',  icon:'📅', label:'일정관리' },
+  docs:     { bg:'rgba(26,188,156,0.06)',  border:'rgba(26,188,156,0.20)',  accent:'#1ABC9C', dim:'rgba(26,188,156,0.5)',  icon:'📁', label:'자료·네트워크' },
 };
 
-/* 섹션별 이슈 매핑 — ticker 이슈를 각 섹션에 연결 */
 const ISSUE_SEC_MAP = {
   office:   ['분양사무실 오픈','163호 인테리어','집기 발주'],
   agency:   ['대대행계약 계약금','BIC 차주법인 확보'],
@@ -3050,100 +3049,101 @@ function getSecIssues(tabPanel){
   );
 }
 
-function buildSecMiniTicker(issues, containerId){
+const SM = {
+  'ts-progress': { color:'#FF9A40', dot:'#FF9A40' },
+  'ts-done':     { color:'#00E87C', dot:'#00E87C' },
+  'ts-pending':  { color:'#FFD040', dot:'#FFD040' },
+  'ts-critical': { color:'#FF3333', dot:'#FF3333' },
+};
+
+function buildSecMiniTicker(issues, containerId, pal){
   const el = document.getElementById(containerId);
-  if(!el || !issues.length) { if(el) el.style.display='none'; return; }
+  if(!el || !issues.length){ if(el) el.style.display='none'; return; }
   el.style.display = 'block';
-  const STATUS_META = {
-    'ts-progress': { color:'#FF8C00', dot:'#FF8C00' },
-    'ts-done':     { color:'#00FF88', dot:'#00FF88' },
-    'ts-pending':  { color:'#FFB800', dot:'#FFB800' },
-    'ts-critical': { color:'#FF0000', dot:'#FF0000' },
-  };
-  const vtopId = containerId + '-vtop';
+  const vtopId  = containerId + '-vtop';
   const vlistId = containerId + '-vlist';
   const hinnerId = containerId + '-hinner';
+  const icon = pal ? pal.icon : '';
+  const ac   = pal ? pal.accent : '#888';
+  const bd   = pal ? pal.border : 'rgba(255,255,255,0.1)';
 
-  el.innerHTML = `
-    <div class="sec-ticker-vtop" id="${vtopId}">
-      <div class="sec-ticker-vlist" id="${vlistId}">
-        ${issues.map(iss=>{
-          const m = STATUS_META[iss.statusClass]||{color:'#888',dot:'#888'};
-          return `<div class="sec-ticker-vrow">
-            <span class="stv-dot" style="background:${m.dot}"></span>
-            <span class="stv-name">${iss.name}</span>
-            <span class="stv-st" style="color:${m.color}">${iss.statusText}</span>
-          </div>`;
-        }).join('')}
-      </div>
-    </div>
-    <div class="sec-ticker-hmarq">
-      <div class="sec-ticker-hinner" id="${hinnerId}">
-        ${[...issues,...issues].map(iss=>{
-          const m = STATUS_META[iss.statusClass]||{color:'#888',dot:'#888'};
-          return `<span class="sth-chip">
-            <span class="stv-dot" style="background:${m.dot};width:5px;height:5px;border-radius:50%;display:inline-block"></span>
-            <span class="sth-name">${iss.name}</span>
-            <span class="sth-st" style="color:${m.color}">${iss.statusText}</span>
-          </span>`;
-        }).join('')}
-      </div>
-    </div>`;
+  el.innerHTML =
+    '<div class="sec-ticker-vtop" id="'+vtopId+'">'+
+      '<div class="sec-ticker-vlist" id="'+vlistId+'">'+
+        issues.map(function(iss){
+          var m = SM[iss.statusClass]||{color:'#888',dot:'#888'};
+          return '<div class="sec-ticker-vrow">'+
+            '<span style="font-size:11px;margin-right:3px">'+icon+'</span>'+
+            '<span class="stv-dot" style="background:'+m.dot+';box-shadow:0 0 4px '+m.dot+'44"></span>'+
+            '<span class="stv-name" style="color:'+ac+'">'+iss.name+'</span>'+
+            '<span class="stv-st" style="color:'+m.color+'">'+iss.statusText+'</span>'+
+            '<span style="font-size:9px;color:rgba(255,255,255,0.3);margin-left:auto">'+iss.owner+'</span>'+
+          '</div>';
+        }).join('')+
+      '</div>'+
+    '</div>'+
+    '<div class="sec-ticker-hmarq" style="border-top:1px solid '+bd+'">'+
+      '<div class="sec-ticker-hinner" id="'+hinnerId+'">'+
+        issues.concat(issues).map(function(iss){
+          var m = SM[iss.statusClass]||{color:'#888',dot:'#888'};
+          return '<span class="sth-chip">'+
+            '<span style="font-size:10px">'+icon+'</span>'+
+            '<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:'+m.dot+';flex-shrink:0"></span>'+
+            '<span class="sth-name" style="color:'+ac+'">'+iss.name+'</span>'+
+            '<span class="sth-st" style="color:'+m.color+'">'+iss.statusText+'</span>'+
+          '</span>';
+        }).join('')+
+      '</div>'+
+    '</div>';
 
-  // 세로 롤링
   if(issues.length > 2){
-    let idx = 0;
-    setInterval(()=>{
-      const vlist = document.getElementById(vlistId);
+    var idx = 0;
+    setInterval(function(){
+      var vlist = document.getElementById(vlistId);
       if(vlist){ idx = (idx+1) % issues.length; vlist.style.top = (-idx*24)+'px'; }
     }, 2800);
   }
-  // 가로 마퀴
-  const hi = document.getElementById(hinnerId);
-  if(hi){ const dur = Math.max(12, issues.length*5); hi.style.animation=`marquee-scroll ${dur}s linear infinite`; }
+  var hi = document.getElementById(hinnerId);
+  if(hi){ var dur = Math.max(12, issues.length*5); hi.style.animation='marquee-scroll '+dur+'s linear infinite'; }
 }
 
 function renderSectionCards(){
-  document.getElementById('sectionCards').innerHTML = DATA.sections.map(sec=>{
-    const pal = SEC_PALETTE[sec.tabPanel] || SEC_PALETTE.docs;
-    const secIssues = getSecIssues(sec.tabPanel);
-    const miniId = 'mini-ticker-' + sec.tabPanel;
-    return `
-    <div class="sec-card" style="border:1px solid ${pal.border};background:${pal.bg};border-radius:10px;margin-bottom:14px;overflow:hidden;">
-      <div class="sec-hdr" onclick="switchTab('${sec.tabPanel}')"
-        style="background:${pal.bg};border-bottom:1px solid ${pal.border};">
-        <div class="sec-num" style="background:${pal.accent};color:#fff">${sec.num}</div>
-        <span style="color:${pal.accent};font-weight:800;">${sec.title}</span>
-        <span class="goto" style="color:${pal.accent}">상세보기 →</span>
-      </div>
-      ${secIssues.length ? `<div class="sec-ticker" id="${miniId}" style="border-color:${pal.border}"></div>` : ''}
-      <div class="tbl-wrap">
-        <table class="kpi-tbl">
-          <thead><tr>
-            <th>No</th><th>항목</th><th>단계별 진행 흐름</th>
-            <th>완료예정</th><th>상태</th><th>비고</th>
-          </tr></thead>
-          <tbody>
-            ${sec.items.map(it=>`
-              <tr onclick="openModal('${it.id}')">
-                <td class="td-no">${it.no}</td>
-                <td class="left td-item" contenteditable="${editModeOn?'true':'false'}" data-field="title" data-id="${it.id}" onblur="saveField(this,'title','${it.id}')">${it.title.replace(/\n/g,'<br>')}</td>
-                <td class="td-steps"><div class="steps-flow">${stepsFlow(it.steps)}</div></td>
-                <td class="td-due">${it.dueDate||'-'}</td>
-                <td class="td-status">${statusBadge(it.status)}</td>
-                <td class="left td-remark">${it.remark||''}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-    </div>`;
+  document.getElementById('sectionCards').innerHTML = DATA.sections.map(function(sec){
+    var pal = SEC_PALETTE[sec.tabPanel] || SEC_PALETTE.docs;
+    var secIssues = getSecIssues(sec.tabPanel);
+    var miniId = 'mini-ticker-' + sec.tabPanel;
+    var tickerHtml = secIssues.length
+      ? '<div class="sec-ticker" id="'+miniId+'" style="border-color:'+pal.border+'"></div>'
+      : '';
+    var rows = sec.items.map(function(it){
+      return '<tr onclick="openModal(\''+it.id+'\')">'+
+        '<td class="td-no">'+it.no+'</td>'+
+        '<td class="left td-item" contenteditable="'+(editModeOn?'true':'false')+'" data-field="title" data-id="'+it.id+'" onblur="saveField(this,\'title\',\''+it.id+'\')">'+it.title.replace(/\n/g,'<br>')+'</td>'+
+        '<td class="td-steps"><div class="steps-flow">'+stepsFlow(it.steps)+'</div></td>'+
+        '<td class="td-due">'+(it.dueDate||'-')+'</td>'+
+        '<td class="td-status">'+statusBadge(it.status)+'</td>'+
+        '<td class="left td-remark">'+(it.remark||'')+'</td>'+
+      '</tr>';
+    }).join('');
+    return '<div class="sec-card" style="border:1px solid '+pal.border+';background:'+pal.bg+';border-radius:10px;margin-bottom:14px;overflow:hidden;">'+
+      '<div class="sec-hdr" onclick="switchTab(\''+sec.tabPanel+'\')" style="background:transparent;border-bottom:1px solid '+pal.border+';padding:10px 14px;">'+
+        '<div class="sec-num" style="background:'+pal.accent+'18;color:'+pal.accent+';border:1px solid '+pal.accent+'44;min-width:28px;text-align:center;border-radius:5px;font-weight:900;font-size:13px;padding:2px 6px;margin-right:6px;">'+pal.icon+'</div>'+
+        '<span style="color:'+pal.accent+';font-weight:800;font-size:12px;">'+sec.title+'</span>'+
+        '<span class="goto" style="color:'+pal.dim+';margin-left:auto;">상세보기 →</span>'+
+      '</div>'+
+      tickerHtml+
+      '<div class="tbl-wrap">'+
+        '<table class="kpi-tbl"><thead><tr>'+
+          '<th>No</th><th>항목</th><th>단계별 진행 흐름</th><th>완료예정</th><th>상태</th><th>비고</th>'+
+        '</tr></thead><tbody>'+rows+'</tbody></table>'+
+      '</div>'+
+    '</div>';
   }).join('');
 
-  // 미니 티커 초기화
-  DATA.sections.forEach(sec=>{
-    const secIssues = getSecIssues(sec.tabPanel);
-    if(secIssues.length) buildSecMiniTicker(secIssues, 'mini-ticker-'+sec.tabPanel);
+  DATA.sections.forEach(function(sec){
+    var pal = SEC_PALETTE[sec.tabPanel] || SEC_PALETTE.docs;
+    var secIssues = getSecIssues(sec.tabPanel);
+    if(secIssues.length) buildSecMiniTicker(secIssues, 'mini-ticker-'+sec.tabPanel, pal);
   });
 }
 
@@ -3485,10 +3485,19 @@ window.appData = (typeof data !== 'undefined') ? data : null;
       : issues;
   }
 
+  function resolveIssuePal(iss){
+    if(typeof ISSUE_SEC_MAP === 'undefined' || typeof SEC_PALETTE === 'undefined') return null;
+    for(const [tab, kws] of Object.entries(ISSUE_SEC_MAP)){
+      if(kws.some(kw=>iss.name.includes(kw))) return SEC_PALETTE[tab];
+    }
+    return null;
+  }
+
   function buildRows(){
     const list = document.getElementById('tickerList');
     const active = getActiveIssues();
     list.innerHTML = '';
+    currentOffset = 0;
     if(!active.length){
       const empty = document.createElement('div');
       empty.className = 'ticker-row';
@@ -3498,15 +3507,23 @@ window.appData = (typeof data !== 'undefined') ? data : null;
       updatePage(active); updateScroll(); return;
     }
     active.forEach((iss) => {
+      const pal = resolveIssuePal(iss);
+      const icon = pal ? pal.icon : '•';
+      const nameColor = pal ? pal.accent : '#fff';
+      const sm = {
+        'ts-progress':'#FF9A40','ts-done':'#00E87C',
+        'ts-pending':'#FFD040','ts-critical':'#FF3333'
+      };
+      const stColor = sm[iss.statusClass] || '#888';
       const row = document.createElement('div');
       row.className = 'ticker-row';
       row.style.cssText = `height:${ROW_H}px`;
       row.innerHTML = `
-        <div class="tr-name">${iss.name}</div>
+        <div class="tr-name"><span style="margin-right:4px">${icon}</span><span style="color:${nameColor}">${iss.name}</span></div>
         <div class="tr-desc">${iss.desc}</div>
-        <div class="tr-status ${iss.statusClass}">${iss.statusText}</div>
+        <div class="tr-status" style="color:${stColor}">${iss.statusText}</div>
         <div class="tr-owner">${iss.owner}</div>`;
-      row.addEventListener('click', ()=> alert(`[${iss.name}]\n${iss.desc}\n상태: ${iss.statusText}\n담당: ${iss.owner}`));
+      row.addEventListener('click', ()=> alert(`[${icon} ${iss.name}]\n${iss.desc}\n상태: ${iss.statusText}\n담당: ${iss.owner}`));
       list.appendChild(row);
     });
     updateScroll();
@@ -3567,20 +3584,23 @@ window.appData = (typeof data !== 'undefined') ? data : null;
     const inner = document.getElementById('marqueeInner');
     if(!inner) return;
     const active = getActiveIssues();
-    const STATUS_META = {
-      'ts-progress': { color:'#FF8C00', dot:'#FF8C00' },
-      'ts-done':     { color:'#00FF88', dot:'#00FF88' },
-      'ts-pending':  { color:'#FFB800', dot:'#FFB800' },
-      'ts-critical': { color:'#FF0000', dot:'#FF0000' },
+    const sm = {
+      'ts-progress':'#FF9A40','ts-done':'#00E87C',
+      'ts-pending':'#FFD040','ts-critical':'#FF3333'
     };
     if(!active.length){ inner.innerHTML = ''; return; }
     const chips = active.map(iss => {
-      const m = STATUS_META[iss.statusClass] || { color:'#888', dot:'#888' };
+      const pal = resolveIssuePal(iss);
+      const icon = pal ? pal.icon : '•';
+      const nameColor = pal ? pal.accent : '#fff';
+      const dotColor  = pal ? pal.accent : '#888';
+      const stColor   = sm[iss.statusClass] || '#888';
       return `<span class="mq-chip">
-        <span class="mq-dot" style="background:${m.dot};box-shadow:0 0 5px ${m.dot}"></span>
-        <span class="mq-name">${iss.name}</span>
-        <span class="mq-st" style="color:${m.color}">${iss.statusText}</span>
-        <span class="mq-st">— ${iss.owner}</span>
+        <span style="font-size:11px;margin-right:2px">${icon}</span>
+        <span class="mq-dot" style="background:${dotColor};box-shadow:0 0 5px ${dotColor}88"></span>
+        <span class="mq-name" style="color:${nameColor}">${iss.name}</span>
+        <span class="mq-st" style="color:${stColor}">${iss.statusText}</span>
+        <span class="mq-st" style="color:rgba(255,255,255,0.35)">— ${iss.owner}</span>
       </span>`;
     }).join('');
     inner.innerHTML = chips + chips;
