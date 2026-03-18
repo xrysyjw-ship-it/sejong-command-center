@@ -141,6 +141,117 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 .hdr-date { color: var(--orange-lt); font-weight: 700; font-size: 12px; white-space: nowrap; }
 .hdr-conf { color: rgba(255,255,255,0.3); font-size: 9px; letter-spacing: 1px; }
 
+/* ── LIVE ISSUE TICKER ── */
+.issue-ticker-wrap {
+  background: rgba(10,20,40,0.85);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(232,119,34,0.2);
+  padding: 0 18px;
+  display: flex; align-items: stretch;
+  height: 170px;
+}
+.ticker-left {
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 6px; flex-shrink: 0; padding: 8px 14px 8px 0;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  margin-right: 14px; min-width: 90px;
+}
+.ticker-live-row {
+  display: flex; align-items: center; gap: 6px;
+}
+.ticker-live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #ff4444; flex-shrink: 0;
+  animation: pulse-red 1.5s ease-in-out infinite;
+}
+@keyframes pulse-red {
+  0%,100% { box-shadow: 0 0 0 0 rgba(255,68,68,0.5); opacity:1; }
+  50%      { box-shadow: 0 0 8px 3px rgba(255,68,68,0.8); opacity:0.85; }
+}
+.ticker-label-text {
+  font-size: 10px; font-weight: 900; letter-spacing: 0.8px; color: #E87722;
+}
+.ticker-datetime {
+  font-size: 9.5px; color: rgba(255,255,255,0.45);
+  font-weight: 600; line-height: 1.5; letter-spacing: 0.2px;
+}
+.ticker-viewport {
+  flex: 1; overflow: hidden; position: relative;
+  height: 160px; /* 5 rows × 32px */
+}
+.ticker-list {
+  position: absolute; left: 0; top: 0; width: 100%;
+  transition: top 0.55s cubic-bezier(0.4,0,0.2,1);
+}
+.ticker-row {
+  display: grid;
+  grid-template-columns: 2fr 3fr 2fr 1.2fr;
+  gap: 0 10px; align-items: center;
+  height: 32px; padding: 0 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 11px; cursor: pointer;
+  transition: background 0.15s;
+}
+.ticker-row:hover { background: rgba(255,255,255,0.05); }
+.tr-name  { font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tr-desc  { color: rgba(255,255,255,0.6); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 10.5px; }
+.tr-status{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 10px; font-weight: 700; }
+.tr-owner { font-size: 10px; color: rgba(255,255,255,0.45); text-align: right; white-space: nowrap; }
+.ts-progress { color: #E87722; }
+.ts-done     { color: #1E9150; }
+.ts-pending  { color: #C28B0A; }
+.ts-critical { color: #ff4444; animation: pulse-red 1.5s ease-in-out infinite; }
+.ticker-right {
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 6px; flex-shrink: 0; padding-left: 12px;
+  border-left: 1px solid rgba(255,255,255,0.08);
+}
+.ticker-btn {
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.55); width: 28px; height: 28px;
+  border-radius: 5px; cursor: pointer; font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+.ticker-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+.ticker-add-btn {
+  background: rgba(232,119,34,0.18); border: 1px solid rgba(232,119,34,0.35);
+  color: #E87722; padding: 5px 10px; border-radius: 5px;
+  cursor: pointer; font-size: 10px; font-weight: 800;
+  white-space: nowrap; transition: background 0.15s; font-family: inherit;
+}
+.ticker-add-btn:hover { background: rgba(232,119,34,0.32); }
+.ticker-page {
+  font-size: 9px; color: rgba(255,255,255,0.3);
+  text-align: center; white-space: nowrap;
+}
+/* 이슈 모달 */
+.issue-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.65); z-index: 9999;
+  align-items: center; justify-content: center;
+}
+.issue-modal-overlay.open { display: flex; }
+.issue-modal {
+  background: var(--navy); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px; padding: 22px 24px; width: 460px; max-width: 95vw;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.issue-modal h3 { font-size: 14px; font-weight: 800; color: #fff; margin: 0 0 16px; }
+.issue-modal label { display: block; font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.45); margin-bottom: 4px; letter-spacing: 0.5px; }
+.issue-modal input, .issue-modal select {
+  width: 100%; box-sizing: border-box;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+  color: #fff; border-radius: 6px; padding: 8px 10px;
+  font-size: 12px; margin-bottom: 12px; font-family: inherit;
+  outline: none; transition: border-color 0.15s;
+}
+.issue-modal input:focus, .issue-modal select:focus { border-color: rgba(232,119,34,0.6); }
+.issue-modal select option { background: #1a2a3a; }
+.issue-modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+.im-cancel { background: rgba(255,255,255,0.07); border: none; color: rgba(255,255,255,0.55); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: inherit; }
+.im-submit { background: var(--orange); border: none; color: #fff; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; font-family: inherit; }
+
 /* ── LEGEND BAR ── */
 .legend-bar {
   background: var(--navy-mid);
@@ -491,6 +602,56 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
     </div>
   </div>
 </header>
+
+<!-- LIVE ISSUE TICKER -->
+<div class="issue-ticker-wrap" id="issueTickerWrap">
+  <div class="ticker-left">
+    <div class="ticker-live-row">
+      <div class="ticker-live-dot"></div>
+      <span class="ticker-label-text">LIVE</span>
+    </div>
+    <div class="ticker-datetime" id="tickerDateTime">
+      로딩 중...
+    </div>
+  </div>
+  <div class="ticker-viewport" id="tickerViewport">
+    <div class="ticker-list" id="tickerList">
+      <!-- rows injected by JS -->
+    </div>
+  </div>
+  <div class="ticker-right">
+    <button class="ticker-btn" id="tickerUp" title="위로">▲</button>
+    <span class="ticker-page" id="tickerPage">1/1</span>
+    <button class="ticker-btn" id="tickerDown" title="아래로">▼</button>
+    <button class="ticker-add-btn" id="tickerAddBtn">+ 이슈</button>
+  </div>
+</div>
+
+<!-- 이슈 추가 모달 -->
+<div class="issue-modal-overlay" id="issueModalOverlay">
+  <div class="issue-modal">
+    <h3>📌 오늘 이슈 등록</h3>
+    <label>이슈명</label>
+    <input type="text" id="im-name" placeholder="이슈 이름을 입력하세요">
+    <label>진행 개요</label>
+    <input type="text" id="im-desc" placeholder="현재 진행 상황을 입력하세요">
+    <label>해결 상황</label>
+    <input type="text" id="im-status-text" placeholder="예: 검토 중 / 협의 완료 / 보류 / 완료">
+    <label>상태 분류</label>
+    <select id="im-status-type">
+      <option value="ts-progress">🟠 진행중</option>
+      <option value="ts-done">🟢 완료</option>
+      <option value="ts-pending">🟡 예정</option>
+      <option value="ts-critical">🔴 긴급</option>
+    </select>
+    <label>담당자</label>
+    <input type="text" id="im-owner" placeholder="담당자 이름">
+    <div class="issue-modal-btns">
+      <button class="im-cancel" id="imCancel">취소</button>
+      <button class="im-submit" id="imSubmit">등록</button>
+    </div>
+  </div>
+</div>
 
 <!-- LEGEND BAR -->
 <div class="legend-bar">
@@ -3051,6 +3212,126 @@ function renderAll(){renderStats();renderHonor();renderSectionCards();}
 document.getElementById('headerDate').textContent=new Date().toISOString().slice(0,10);
 loadData();
 renderAll();
+
+/* ── LIVE ISSUE TICKER JS ── */
+(function(){
+  const ROW_H = 32;
+  const MAX_VISIBLE = 5;
+  const DAYS = ['일','월','화','수','목','금','토'];
+
+  /* 샘플 이슈 데이터 (편집 모드에서 추가 가능) */
+  let issues = [
+    { name:'대대행계약 계약금', desc:'3,300만 입금 준비 중', statusText:'은행 확인 중', statusClass:'ts-critical', owner:'유정우' },
+    { name:'163호 인테리어', desc:'착공 후 대표이사실 시공 진행', statusText:'진행중', statusClass:'ts-progress', owner:'이성진' },
+    { name:'집기 발주', desc:'배치도 기준 발주 예정', statusText:'대기중', statusClass:'ts-pending', owner:'담당자' },
+    { name:'분양사무실 오픈', desc:'161·162호 분양판보실 공사 잔여', statusText:'진행중', statusClass:'ts-progress', owner:'전관우' },
+    { name:'K농산 대출 심사', desc:'은행 가승인 서류 준비 중', statusText:'서류 제출 예정', statusClass:'ts-pending', owner:'이성진' },
+    { name:'BIC 차주법인 확보', desc:'차주법인 리스트 수령 후 분석 중', statusText:'협의중', statusClass:'ts-progress', owner:'유정우' },
+  ];
+
+  let currentOffset = 0; // 현재 스크롤 위치 (줄 단위)
+  let autoTimer = null;
+
+  function buildRows(){
+    const list = document.getElementById('tickerList');
+    list.innerHTML = '';
+    issues.forEach((iss, i) => {
+      const row = document.createElement('div');
+      row.className = 'ticker-row';
+      row.style.cssText = `height:${ROW_H}px`;
+      row.innerHTML = `
+        <div class="tr-name">${iss.name}</div>
+        <div class="tr-desc">${iss.desc}</div>
+        <div class="tr-status ${iss.statusClass}">${iss.statusText}</div>
+        <div class="tr-owner">${iss.owner}</div>`;
+      row.addEventListener('click', ()=> alert(`[${iss.name}]\n${iss.desc}\n상태: ${iss.statusText}\n담당: ${iss.owner}`));
+      list.appendChild(row);
+    });
+    updateScroll();
+    updatePage();
+  }
+
+  function maxOffset(){
+    return Math.max(0, issues.length - MAX_VISIBLE);
+  }
+
+  function updateScroll(){
+    const list = document.getElementById('tickerList');
+    list.style.top = (-currentOffset * ROW_H) + 'px';
+  }
+
+  function updatePage(){
+    const total = Math.ceil(issues.length / MAX_VISIBLE) || 1;
+    const current = Math.floor(currentOffset / MAX_VISIBLE) + 1;
+    document.getElementById('tickerPage').textContent = `${current}/${total}`;
+  }
+
+  function scrollDown(){
+    if(issues.length <= MAX_VISIBLE) return;
+    currentOffset = (currentOffset >= maxOffset()) ? 0 : currentOffset + 1;
+    updateScroll(); updatePage();
+  }
+
+  function scrollUp(){
+    if(issues.length <= MAX_VISIBLE) return;
+    currentOffset = (currentOffset <= 0) ? maxOffset() : currentOffset - 1;
+    updateScroll(); updatePage();
+  }
+
+  function startAuto(){
+    if(issues.length <= MAX_VISIBLE) return;
+    autoTimer = setInterval(scrollDown, 3500);
+  }
+  function stopAuto(){ clearInterval(autoTimer); }
+
+  /* 날짜/시간 표시 */
+  function updateDateTime(){
+    const now = new Date();
+    const day = DAYS[now.getDay()];
+    const ymd = now.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'});
+    const hm = now.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    const el = document.getElementById('tickerDateTime');
+    if(el) el.innerHTML = `${ymd}<br>${day}요일 ${hm}`;
+  }
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
+
+  /* 이벤트 */
+  document.getElementById('tickerUp').addEventListener('click', ()=>{ stopAuto(); scrollUp(); startAuto(); });
+  document.getElementById('tickerDown').addEventListener('click', ()=>{ stopAuto(); scrollDown(); startAuto(); });
+
+  const vp = document.getElementById('tickerViewport');
+  vp.addEventListener('mouseenter', stopAuto);
+  vp.addEventListener('mouseleave', startAuto);
+
+  /* 이슈 추가 모달 */
+  document.getElementById('tickerAddBtn').addEventListener('click', ()=>{
+    document.getElementById('issueModalOverlay').classList.add('open');
+  });
+  document.getElementById('imCancel').addEventListener('click', ()=>{
+    document.getElementById('issueModalOverlay').classList.remove('open');
+  });
+  document.getElementById('issueModalOverlay').addEventListener('click', (e)=>{
+    if(e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+  });
+  document.getElementById('imSubmit').addEventListener('click', ()=>{
+    const name  = document.getElementById('im-name').value.trim();
+    const desc  = document.getElementById('im-desc').value.trim();
+    const stTxt = document.getElementById('im-status-text').value.trim();
+    const stCls = document.getElementById('im-status-type').value;
+    const owner = document.getElementById('im-owner').value.trim();
+    if(!name) return alert('이슈명을 입력하세요.');
+    issues.unshift({ name, desc: desc||'-', statusText: stTxt||'-', statusClass: stCls, owner: owner||'-' });
+    currentOffset = 0;
+    buildRows();
+    stopAuto(); startAuto();
+    ['im-name','im-desc','im-status-text','im-owner'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('issueModalOverlay').classList.remove('open');
+  });
+
+  buildRows();
+  startAuto();
+})();
 </script>
 
 </body></html>
