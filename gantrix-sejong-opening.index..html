@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>공정관리 3단계 자동화 시스템</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+  
+  :root {
+    --primary: #1a3a5c;
+    --primary-light: #2e5f8a;
+    --accent: #e87722;
+    --accent-light: #f5a55a;
+    --bg: #f0f4f8;
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-500: #64748b;
+    --gray-700: #334155;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --warn: #f59e0b;
+    --gantt-1: #3b82f6;
+    --gantt-2: #8b5cf6;
+    --gantt-3: #ec4899;
+    --gantt-4: #14b8a6;
+    --gantt-5: #f97316;
+    --gantt-6: #84cc16;
+    --gantt-7: #06b6d4;
+    --gantt-8: #a855f7;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--gray-700);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--primary);
+    color: white;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  }
+  header h1 { font-size: 16px; font-weight: 700; letter-spacing: -.3px; }
+  header .badge {
+    background: var(--accent);
+    color: white;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-weight: 700;
+  }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    background: var(--primary-light);
+    padding: 0 24px;
+    gap: 2px;
+  }
+  .tab-btn {
+    padding: 10px 20px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,.65);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all .2s;
+  }
+  .tab-btn.active {
+    color: white;
+    border-bottom-color: var(--accent);
+  }
+  .tab-btn:hover { color: white; }
+
+  /* ── Layout ── */
+  .container { padding: 20px 24px; max-width: 1400px; margin: 0 auto; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── Cards ── */
+  .card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .card-header {
+    background: var(--primary);
+    color: white;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-body { padding: 16px; }
+
+  /* ── Forms ── */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  label { font-size: 12px; font-weight: 700; color: var(--gray-500); }
+  input[type="date"], input[type="text"], input[type="number"], select {
+    border: 1px solid var(--gray-200);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color .2s;
+  }
+  input:focus, select:focus { border-color: var(--primary-light); }
+
+  /* ── Buttons ── */
+  .btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--primary-light); }
+  .btn-accent { background: var(--accent); color: white; }
+  .btn-accent:hover { background: var(--accent-light); }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+  .btn-danger { background: var(--danger); color: white; }
+  .btn-danger:hover { opacity: .85; }
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--gray-300);
+    color: var(--gray-700);
+  }
+  .btn-ghost:hover { background: var(--gray-100); }
+
+  /* ── Table ── */
+  .tbl-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    background: var(--gray-100);
+    padding: 9px 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--gray-700);
+    border: 1px solid var(--gray-200);
+    white-space: nowrap;
+  }
+  td {
+    padding: 7px 10px;
+    border: 1px solid var(--gray-200);
+    text-align: center;
+    vertical-align: middle;
+  }
+  tr:hover td { background: var(--gray-50); }
+  td input, td select {
+    border: none;
+    background: transparent;
+    text-align: center;
+    width: 100%;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    padding: 0;
+  }
+  td input:focus { background: #fffde7; border-radius: 3px; }
+  td.left { text-align: left; }
+
+  /* ── Gantt bar cells ── */
+  .bar-cell {
+    padding: 4px 2px;
+    min-width: 32px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .bar-filled {
+    border-radius: 3px;
+    color: white;
+    padding: 3px 0;
+    font-size: 9px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* ── Tag ── */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .tag-ok { background: #dcfce7; color: #16a34a; }
+  .tag-warn { background: #fef9c3; color: #ca8a04; }
+  .tag-err { background: #fee2e2; color: #dc2626; }
+
+  /* ── Calendar ── */
+  .cal-wrap { overflow-x: auto; }
+  .cal-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .cal-table th {
+    background: var(--primary);
+    color: white;
+    padding: 8px 4px;
+    font-size: 11px;
+    border: 1px solid rgba(255,255,255,.2);
+    min-width: 30px;
+  }
+  .cal-table th.col-name { min-width: 100px; background: var(--primary-light); }
+  .cal-table td {
+    padding: 4px 2px;
+    border: 1px solid var(--gray-200);
+    text-align: center;
+    min-width: 30px;
+    height: 28px;
+  }
+  .cal-cell-filled {
+    border-radius: 3px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: white;
+    font-weight: 700;
+  }
+  .cal-table td.weekend { background: #fef2f2; }
+  .cal-table td.holiday { background: #fff7ed; }
+  .cal-table td.no-day { background: var(--gray-100); }
+
+  /* ── Process Table ── */
+  .proc-table td input[type="text"] { min-width: 100px; }
+  .proc-table td input[type="number"] { min-width: 60px; }
+
+  /* ── Summary ── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .summary-card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .summary-card .val {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .summary-card .lbl { font-size: 11px; color: var(--gray-500); }
+
+  /* ── Holiday list ── */
+  .holiday-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .holiday-tag {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 12px;
+  }
+  .holiday-tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--danger);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+  }
+
+  /* ── Toolbar ── */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  /* ── Section title ── */
+  .sec-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ── Note box ── */
+  .note {
+    background: #fffbeb;
+    border-left: 3px solid var(--warn);
+    border-radius: 0 6px 6px 0;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--gray-700);
+    margin-bottom: 12px;
+  }
+
+  /* ── Color dots ── */
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .container { padding: 12px; }
+    .form-grid { grid-template-columns: 1fr 1fr; }
+    header h1 { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚙️ 공정관리 3단계 자동화 시스템</h1>
+  <span class="badge">GanttChart → 공정표 → 공사일정표</span>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('tab-params')">① 변경요인 설정</button>
+  <button class="tab-btn" onclick="switchTab('tab-gantt')">② 간트차트 입력</button>
+  <button class="tab-btn" onclick="switchTab('tab-schedule')">③ 공정표</button>
+  <button class="tab-btn" onclick="switchTab('tab-calendar')">④ 공사일정표</button>
+</div>
+
+<!-- ════════════════════════════════════
+  ① 변경요인 설정
+════════════════════════════════════ -->
+<div class="panel active" id="tab-params">
+<div class="container">
+
+  <div class="card">
+    <div class="card-header">📋 기본 매개변수 설정</div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>프로젝트 시작일</label>
+          <input type="date" id="startDate" value="2025-11-26">
+        </div>
+        <div class="form-group">
+          <label>주말 작업 여부</label>
+          <select id="weekendWork">
+            <option value="N">N – 토·일 휴무</option>
+            <option value="Y">Y – 토·일 포함 작업</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>프로젝트명</label>
+          <input type="text" id="projectName" value="세종 어반아트리움" placeholder="프로젝트명 입력">
+        </div>
+        <div class="form-group">
+          <label>총 공사일수 (차)</label>
+          <input type="number" id="totalDays" value="30" min="10" max="180">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">🚫 휴무일(작업 없는 날) 관리</div>
+    <div class="card-body">
+      <div class="note">※ 주말 제외 추가 휴무일만 입력하세요. (기상이변·공사중단일 등)</div>
+      <div class="toolbar">
+        <input type="date" id="holidayInput">
+        <input type="text" id="holidayMemo" placeholder="사유 (선택)" style="width:180px">
+        <button class="btn btn-primary btn-sm" onclick="addHoliday()">+ 휴무일 추가</button>
+      </div>
+      <div class="holiday-list" id="holidayList">
+        <span style="color:var(--gray-500);font-size:12px">추가된 휴무일이 없습니다.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">📝 변경 사유 메모</div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>기상이변 메모</label>
+          <input type="text" id="memoWeather" placeholder="우천·폭설·폭염 등">
+        </div>
+        <div class="form-group">
+          <label>인력섭외 이슈</label>
+          <input type="text" id="memoStaff" placeholder="인원 부족·교체 등">
+        </div>
+        <div class="form-group">
+          <label>공사 중단 이슈</label>
+          <input type="text" id="memoStop" placeholder="행정·감리·발주 문제 등">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:8px">
+    <button class="btn btn-accent" onclick="switchTab('tab-gantt')">② 간트차트 입력으로 →</button>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════════
+  ② 간트차트 입력
+════════════════════════════════════ -->
+<div class="panel" id="tab-gantt">
+<div class="container">
+
+  <div class="card">
+    <div class="card-header">📊 공정 간트차트 (자동화 템플릿)</div>
+    <div class="card-body">
+      <div class="note">
+        ※ 공정명·계획시작일(차)·기간(일) 입력 → 계획종료일 자동 계산<br>
+        ※ 선행공정 입력 시 실제 일정이 자동 조정됩니다. 딜레이(일)는 여유 일수 추가 시 사용.
+      </div>
+      <div class="toolbar">
+        <button class="btn btn-primary btn-sm" onclick="addProcess()">+ 공정 추가</button>
+        <button class="btn btn-ghost btn-sm" onclick="loadSample()">샘플 데이터 불러오기</button>
+        <button class="btn btn-accent btn-sm" onclick="recalcAll()">🔄 전체 재계산</button>
+      </div>
+
+      <div class="tbl-wrap">
+        <table id="ganttInputTable">
+          <thead>
+            <tr>
+              <th style="width:40px">No</th>
+              <th style="min-width:110px">공정명</th>
+              <th style="width:80px">계획시작일<br><small>(차)</small></th>
+              <th style="width:70px">기간<br><small>(일)</small></th>
+              <th style="width:80px">계획종료일<br><small>(차·자동)</small></th>
+              <th style="min-width:110px">선행공정명</th>
+              <th style="width:70px">딜레이<br><small>(일)</small></th>
+              <th style="width:80px">실제시작일<br><small>(차·자동)</small></th>
+              <th style="width:80px">실제종료일<br><small>(차·자동)</small></th>
+              <th style="width:50px">삭제</th>
+            </tr>
+          </thead>
+          <tbody id="ganttTbody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gantt Bar 시각화 -->
+  <div class="card" id="ganttVisCard">
+    <div class="card-header">📈 간트 바 시각화 (차수 기준)</div>
+    <div class="card-body">
+      <div class="tbl-wrap" id="ganttBarWrap">
+        <p style="color:var(--gray-500);font-size:13px">공정을 입력하면 간트바가 표시됩니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center">
+    <button class="btn btn-accent" onclick="recalcAll(); switchTab('tab-schedule')">③ 공정표 보기 →</button>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════════
+  ③ 공정표 (실제 날짜 환산)
+════════════════════════════════════ -->
+<div class="panel" id="tab-schedule">
+<div class="container">
+
+  <div class="summary-grid" id="summaryGrid"></div>
+
+  <div class="card">
+    <div class="card-header">📋 공정표 – 실제 날짜 환산</div>
+    <div class="card-body">
+      <div class="note">※ 프로젝트 시작일 + 주말 휴무 설정 + 추가 휴무일을 반영하여 실제 날짜로 환산됩니다.</div>
+      <div class="tbl-wrap">
+        <table id="scheduleTable">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>공정명</th>
+              <th>실제 시작일</th>
+              <th>실제 종료일</th>
+              <th>실작업일수</th>
+              <th>기간(일)</th>
+              <th>비고</th>
+            </tr>
+          </thead>
+          <tbody id="scheduleTbody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center">
+    <button class="btn btn-accent" onclick="switchTab('tab-calendar')">④ 공사일정표 보기 →</button>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════════
+  ④ 공사일정표 (월별 캘린더)
+════════════════════════════════════ -->
+<div class="panel" id="tab-calendar">
+<div class="container">
+
+  <div class="card">
+    <div class="card-header">📅 공사일정표 – 월별 캘린더</div>
+    <div class="card-body">
+      <div class="toolbar">
+        <div class="form-group" style="flex-direction:row;align-items:center;gap:8px">
+          <label style="white-space:nowrap">표시 월:</label>
+          <input type="month" id="calMonth" style="font-size:13px">
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="renderCalendar()">🗓️ 캘린더 생성</button>
+        <button class="btn btn-ghost btn-sm" onclick="prevMonth()">◀ 이전 달</button>
+        <button class="btn btn-ghost btn-sm" onclick="nextMonth()">▶ 다음 달</button>
+      </div>
+
+      <!-- 범례 -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;font-size:12px" id="legend"></div>
+
+      <div class="cal-wrap" id="calWrap">
+        <p style="color:var(--gray-500);font-size:13px">공정 데이터를 입력하고 "캘린더 생성" 버튼을 누르세요.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════
+let processes = [];   // [{id, name, planStart, duration, predecessor, delay}]
+let holidays = [];    // [{date: 'YYYY-MM-DD', memo}]
+let procIdSeq = 1;
+
+const COLORS = [
+  '#3b82f6','#8b5cf6','#ec4899','#14b8a6',
+  '#f97316','#84cc16','#06b6d4','#a855f7',
+  '#ef4444','#22c55e','#f59e0b','#6366f1'
+];
+
+// ══════════════════════════════════════
+//  TAB
+// ══════════════════════════════════════
+function switchTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const idx = ['tab-params','tab-gantt','tab-schedule','tab-calendar'].indexOf(id);
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+  if (id === 'tab-schedule') renderSchedule();
+  if (id === 'tab-calendar') {
+    setDefaultCalMonth();
+    renderCalendar();
+  }
+  if (id === 'tab-gantt') renderGanttBar();
+}
+
+// ══════════════════════════════════════
+//  HOLIDAY
+// ══════════════════════════════════════
+function addHoliday() {
+  const d = document.getElementById('holidayInput').value;
+  const m = document.getElementById('holidayMemo').value;
+  if (!d) { alert('날짜를 선택하세요.'); return; }
+  if (holidays.find(h => h.date === d)) { alert('이미 추가된 날짜입니다.'); return; }
+  holidays.push({ date: d, memo: m });
+  holidays.sort((a,b) => a.date.localeCompare(b.date));
+  renderHolidayList();
+  document.getElementById('holidayInput').value = '';
+  document.getElementById('holidayMemo').value = '';
+}
+
+function removeHoliday(date) {
+  holidays = holidays.filter(h => h.date !== date);
+  renderHolidayList();
+}
+
+function renderHolidayList() {
+  const el = document.getElementById('holidayList');
+  if (!holidays.length) {
+    el.innerHTML = '<span style="color:var(--gray-500);font-size:12px">추가된 휴무일이 없습니다.</span>';
+    return;
+  }
+  el.innerHTML = holidays.map(h =>
+    `<div class="holiday-tag">
+      <span>📅 ${h.date}${h.memo ? ' (' + h.memo + ')' : ''}</span>
+      <button onclick="removeHoliday('${h.date}')">✕</button>
+    </div>`
+  ).join('');
+}
+
+// ══════════════════════════════════════
+//  PROCESS MANAGEMENT
+// ══════════════════════════════════════
+function addProcess(data) {
+  const id = procIdSeq++;
+  const proc = data || { id, name: '', planStart: '', duration: '', predecessor: '', delay: 0 };
+  if (!data) { proc.id = id; processes.push(proc); }
+  renderGanttTable();
+  return proc;
+}
+
+function removeProcess(id) {
+  processes = processes.filter(p => p.id !== id);
+  renderGanttTable();
+}
+
+function readProcessRow(id) {
+  const row = document.querySelector(`tr[data-id="${id}"]`);
+  if (!row) return;
+  const proc = processes.find(p => p.id === id);
+  if (!proc) return;
+  proc.name = row.querySelector('.inp-name').value.trim();
+  proc.planStart = parseInt(row.querySelector('.inp-start').value) || 0;
+  proc.duration = parseInt(row.querySelector('.inp-dur').value) || 0;
+  proc.predecessor = row.querySelector('.inp-pred').value.trim();
+  proc.delay = parseInt(row.querySelector('.inp-delay').value) || 0;
+}
+
+function readAllRows() {
+  processes.forEach(p => readProcessRow(p.id));
+}
+
+function recalcAll() {
+  readAllRows();
+  calcActual();
+  renderGanttTable();
+  renderGanttBar();
+}
+
+// ══════════════════════════════════════
+//  CALC LOGIC
+// ══════════════════════════════════════
+function calcPlanEnd(start, dur) {
+  if (!start || !dur) return '';
+  return start + dur - 1;
+}
+
+function calcActual() {
+  // Build lookup: name -> actualEnd
+  const endMap = {};
+  // topological order (simple pass)
+  for (let iter = 0; iter < processes.length * 2; iter++) {
+    processes.forEach(p => {
+      let actualStart;
+      if (p.predecessor) {
+        const pred = processes.find(x => x.name === p.predecessor);
+        if (pred && endMap[pred.name] !== undefined) {
+          actualStart = endMap[pred.name] + 1 + (p.delay || 0);
+        } else {
+          actualStart = (p.planStart || 1) + (p.delay || 0);
+        }
+      } else {
+        actualStart = (p.planStart || 1) + (p.delay || 0);
+      }
+      p.actualStart = actualStart;
+      p.actualEnd = p.duration ? actualStart + p.duration - 1 : '';
+      endMap[p.name] = p.actualEnd || p.actualStart;
+    });
+  }
+}
+
+// ══════════════════════════════════════
+//  GANTT TABLE RENDER
+// ══════════════════════════════════════
+function renderGanttTable() {
+  const tbody = document.getElementById('ganttTbody');
+  tbody.innerHTML = '';
+  processes.forEach((p, i) => {
+    const planEnd = calcPlanEnd(p.planStart, p.duration);
+    const tr = document.createElement('tr');
+    tr.dataset.id = p.id;
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td><input class="inp-name" type="text" value="${p.name}" placeholder="공정명 입력" oninput="onInputChange(${p.id})"></td>
+      <td><input class="inp-start" type="number" value="${p.planStart || ''}" min="1" placeholder="1" oninput="onInputChange(${p.id})"></td>
+      <td><input class="inp-dur" type="number" value="${p.duration || ''}" min="1" placeholder="일수" oninput="onInputChange(${p.id})"></td>
+      <td style="color:var(--primary-light);font-weight:700">${planEnd || '-'}</td>
+      <td><input class="inp-pred" type="text" value="${p.predecessor || ''}" placeholder="선행공정명" list="predList" oninput="onInputChange(${p.id})"></td>
+      <td><input class="inp-delay" type="number" value="${p.delay || 0}" min="0" oninput="onInputChange(${p.id})"></td>
+      <td style="color:var(--accent);font-weight:700">${p.actualStart || '-'}</td>
+      <td style="color:var(--accent);font-weight:700">${p.actualEnd || '-'}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="removeProcess(${p.id})">✕</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // datalist for predecessor
+  let dl = document.getElementById('predList');
+  if (!dl) { dl = document.createElement('datalist'); dl.id = 'predList'; document.body.appendChild(dl); }
+  dl.innerHTML = processes.map(p => p.name ? `<option value="${p.name}">` : '').join('');
+}
+
+function onInputChange(id) {
+  readProcessRow(id);
+  calcActual();
+  // update plan end & actual cols in same row
+  const row = document.querySelector(`tr[data-id="${id}"]`);
+  if (!row) return;
+  const proc = processes.find(p => p.id === id);
+  if (!proc) return;
+  const tds = row.querySelectorAll('td');
+  tds[4].textContent = calcPlanEnd(proc.planStart, proc.duration) || '-';
+  // recalc all actuals
+  processes.forEach(p => {
+    const r = document.querySelector(`tr[data-id="${p.id}"]`);
+    if (!r) return;
+    const cells = r.querySelectorAll('td');
+    cells[7].textContent = p.actualStart || '-';
+    cells[8].textContent = p.actualEnd || '-';
+  });
+  renderGanttBar();
+}
+
+// ══════════════════════════════════════
+//  GANTT BAR RENDER
+// ══════════════════════════════════════
+function renderGanttBar() {
+  const wrap = document.getElementById('ganttBarWrap');
+  if (!processes.length) {
+    wrap.innerHTML = '<p style="color:var(--gray-500);font-size:13px">공정을 입력하면 간트바가 표시됩니다.</p>';
+    return;
+  }
+  const totalDays = parseInt(document.getElementById('totalDays').value) || 30;
+  let html = '<table style="width:100%;border-collapse:collapse;font-size:12px">';
+  // header
+  html += '<thead><tr><th style="min-width:90px;background:#1a3a5c;color:white;padding:6px;border:1px solid rgba(255,255,255,.2)">공정명</th>';
+  for (let d = 1; d <= totalDays; d++) {
+    html += `<th style="min-width:26px;width:26px;background:#1a3a5c;color:white;padding:4px 2px;border:1px solid rgba(255,255,255,.2);font-size:10px">${d}</th>`;
+  }
+  html += '</tr></thead><tbody>';
+
+  processes.forEach((p, i) => {
+    const color = COLORS[i % COLORS.length];
+    html += `<tr><td style="padding:5px 8px;border:1px solid #e2e8f0;white-space:nowrap;font-weight:700;font-size:12px">
+      <span class="dot" style="background:${color};margin-right:4px"></span>${p.name || '(미입력)'}
+    </td>`;
+    for (let d = 1; d <= totalDays; d++) {
+      const inRange = p.actualStart && p.actualEnd && d >= p.actualStart && d <= p.actualEnd;
+      const isStart = inRange && d === p.actualStart;
+      const isEnd = inRange && d === p.actualEnd;
+      const bRadius = isStart && isEnd ? '4px' : isStart ? '4px 0 0 4px' : isEnd ? '0 4px 4px 0' : '0';
+      if (inRange) {
+        html += `<td style="padding:3px 1px;border:1px solid #e2e8f0">
+          <div style="background:${color};border-radius:${bRadius};height:20px;opacity:.85"></div>
+        </td>`;
+      } else {
+        html += `<td style="border:1px solid #e2e8f0"></td>`;
+      }
+    }
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+// ══════════════════════════════════════
+//  WORKDAY CALCULATOR
+// ══════════════════════════════════════
+function getWorkday(startDate, n, includeWeekend, extraHolidays) {
+  // Returns the date that is the nth workday from startDate (1-indexed)
+  let count = 0;
+  let cur = new Date(startDate);
+  cur.setHours(0,0,0,0);
+  cur.setDate(cur.getDate() - 1); // will increment first
+
+  while (count < n) {
+    cur.setDate(cur.getDate() + 1);
+    const dow = cur.getDay(); // 0=Sun, 6=Sat
+    const dateStr = cur.toISOString().slice(0,10);
+    const isWeekend = !includeWeekend && (dow === 0 || dow === 6);
+    const isHoliday = extraHolidays.includes(dateStr);
+    if (!isWeekend && !isHoliday) count++;
+  }
+  return cur;
+}
+
+function dateToStr(d) {
+  return d.toISOString().slice(0,10);
+}
+
+function isWeekendDate(d) {
+  return d.getDay() === 0 || d.getDay() === 6;
+}
+
+// ══════════════════════════════════════
+//  SCHEDULE TABLE
+// ══════════════════════════════════════
+function renderSchedule() {
+  calcActual();
+  const startDate = document.getElementById('startDate').value;
+  const includeWeekend = document.getElementById('weekendWork').value === 'Y';
+  const hdDates = holidays.map(h => h.date);
+
+  const tbody = document.getElementById('scheduleTbody');
+  const summaryGrid = document.getElementById('summaryGrid');
+  tbody.innerHTML = '';
+
+  if (!startDate || !processes.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="color:var(--gray-500);padding:20px;text-align:center">공정 데이터가 없습니다. ② 간트차트 입력 탭에서 공정을 추가하세요.</td></tr>';
+    return;
+  }
+
+  let totalWorkDays = 0;
+  let projectEnd = null;
+
+  processes.forEach((p, i) => {
+    if (!p.actualStart || !p.actualEnd) return;
+    const realStart = getWorkday(startDate, p.actualStart, includeWeekend, hdDates);
+    const realEnd = getWorkday(startDate, p.actualEnd, includeWeekend, hdDates);
+    const color = COLORS[i % COLORS.length];
+
+    p._realStart = realStart;
+    p._realEnd = realEnd;
+    if (!projectEnd || realEnd > projectEnd) projectEnd = realEnd;
+    totalWorkDays = Math.max(totalWorkDays, p.actualEnd);
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td style="text-align:left;font-weight:700">
+        <span class="dot" style="background:${color};margin-right:4px"></span>${p.name}
+      </td>
+      <td>${dateToStr(realStart)}</td>
+      <td>${dateToStr(realEnd)}</td>
+      <td>${p.duration}</td>
+      <td>${p.actualEnd - p.actualStart + 1}</td>
+      <td class="left" style="font-size:12px;color:var(--gray-500)">${p.predecessor ? '선행: '+p.predecessor+(p.delay ? ' +'+p.delay+'일' : '') : '-'}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // Summary
+  const activeProcs = processes.filter(p => p.actualStart && p.actualEnd);
+  const sd = new Date(startDate);
+  const edStr = projectEnd ? dateToStr(projectEnd) : '-';
+  const totalCal = projectEnd ? Math.round((projectEnd - sd) / (1000*60*60*24)) + 1 : 0;
+
+  summaryGrid.innerHTML = `
+    <div class="summary-card">
+      <div class="val">${activeProcs.length}</div>
+      <div class="lbl">총 공정 수</div>
+    </div>
+    <div class="summary-card">
+      <div class="val">${startDate}</div>
+      <div class="lbl">공사 시작일</div>
+    </div>
+    <div class="summary-card">
+      <div class="val" style="font-size:16px">${edStr}</div>
+      <div class="lbl">공사 종료일 (예정)</div>
+    </div>
+    <div class="summary-card">
+      <div class="val">${totalCal}</div>
+      <div class="lbl">총 공사 일수 (달력)</div>
+    </div>
+    <div class="summary-card">
+      <div class="val">${totalWorkDays}</div>
+      <div class="lbl">총 작업 차수</div>
+    </div>
+    <div class="summary-card">
+      <div class="val">${includeWeekend ? 'Y' : 'N'}</div>
+      <div class="lbl">주말 작업</div>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════
+//  CALENDAR
+// ══════════════════════════════════════
+function setDefaultCalMonth() {
+  const startDate = document.getElementById('startDate').value;
+  if (startDate) {
+    document.getElementById('calMonth').value = startDate.slice(0,7);
+  }
+}
+
+function prevMonth() {
+  const m = document.getElementById('calMonth');
+  const d = new Date(m.value + '-01');
+  d.setMonth(d.getMonth() - 1);
+  m.value = d.toISOString().slice(0,7);
+  renderCalendar();
+}
+
+function nextMonth() {
+  const m = document.getElementById('calMonth');
+  const d = new Date(m.value + '-01');
+  d.setMonth(d.getMonth() + 1);
+  m.value = d.toISOString().slice(0,7);
+  renderCalendar();
+}
+
+function renderCalendar() {
+  renderSchedule(); // ensure _realStart/_realEnd are set
+
+  const monthStr = document.getElementById('calMonth').value;
+  if (!monthStr) return;
+
+  const [yr, mo] = monthStr.split('-').map(Number);
+  const daysInMonth = new Date(yr, mo, 0).getDate();
+  const includeWeekend = document.getElementById('weekendWork').value === 'Y';
+  const hdDates = holidays.map(h => h.date);
+
+  const wrap = document.getElementById('calWrap');
+  const legend = document.getElementById('legend');
+
+  if (!processes.length) {
+    wrap.innerHTML = '<p style="color:var(--gray-500);font-size:13px">공정 데이터가 없습니다.</p>';
+    return;
+  }
+
+  // Build day occupancy map: date -> [proc names]
+  const calData = {}; // 'YYYY-MM-DD' -> [{name, color}]
+  const activeProcs = processes.filter(p => p._realStart && p._realEnd);
+
+  activeProcs.forEach((p, i) => {
+    const color = COLORS[i % COLORS.length];
+    let cur = new Date(p._realStart);
+    cur.setHours(0,0,0,0);
+    while (cur <= p._realEnd) {
+      const ds = dateToStr(cur);
+      if (!calData[ds]) calData[ds] = [];
+      calData[ds].push({ name: p.name, color });
+      cur.setDate(cur.getDate() + 1);
+    }
+  });
+
+  // Table
+  let html = `<table class="cal-table">`;
+  html += `<thead><tr>
+    <th class="col-name">공정명</th>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(yr, mo-1, d);
+    const dow = date.getDay();
+    const dayName = ['일','월','화','수','목','금','토'][dow];
+    const isWE = dow === 0 || dow === 6;
+    const dateStr = `${yr}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isHD = hdDates.includes(dateStr);
+    html += `<th style="${isWE ? 'color:#ef4444' : ''}${isHD ? 'background:#fff7ed;color:#f59e0b' : ''}">${d}<br><span style="font-size:9px;opacity:.8">${dayName}</span></th>`;
+  }
+  html += '</tr></thead><tbody>';
+
+  activeProcs.forEach((p, i) => {
+    const color = COLORS[i % COLORS.length];
+    html += `<tr><td class="col-name" style="text-align:left;padding:5px 10px;font-weight:700;font-size:12px;border:1px solid #e2e8f0">
+      <span class="dot" style="background:${color};margin-right:5px"></span>${p.name}
+    </td>`;
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(yr, mo-1, d);
+      const dow = date.getDay();
+      const dateStr = `${yr}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const isWE = dow === 0 || dow === 6;
+      const isHD = hdDates.includes(dateStr);
+      const inRange = p._realStart && p._realEnd &&
+        date >= new Date(p._realStart.toDateString()) &&
+        date <= new Date(p._realEnd.toDateString());
+
+      let bg = '';
+      if (isHD) bg = 'background:#fff7ed';
+      else if (isWE && !includeWeekend) bg = 'background:#fef2f2';
+
+      if (inRange) {
+        const isNoWork = isHD || (!includeWeekend && isWE);
+        html += `<td style="padding:3px 2px;border:1px solid #e2e8f0;${bg}">
+          <div class="cal-cell-filled" style="background:${isNoWork ? color + '55' : color}">
+            ${isNoWork ? '(' + (isHD ? '휴' : '주') + ')' : '●'}
+          </div>
+        </td>`;
+      } else {
+        html += `<td style="border:1px solid #e2e8f0;${bg}"></td>`;
+      }
+    }
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+
+  // Legend
+  legend.innerHTML = activeProcs.map((p, i) =>
+    `<div style="display:flex;align-items:center;gap:4px">
+      <span class="dot" style="background:${COLORS[i % COLORS.length]}"></span>
+      <span>${p.name}</span>
+    </div>`
+  ).join('') +
+  `<div style="display:flex;align-items:center;gap:4px">
+    <span style="width:14px;height:14px;background:#fef2f2;border:1px solid #e2e8f0;border-radius:2px;display:inline-block"></span>
+    <span>주말</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:4px">
+    <span style="width:14px;height:14px;background:#fff7ed;border:1px solid #e2e8f0;border-radius:2px;display:inline-block"></span>
+    <span>추가 휴무일</span>
+  </div>`;
+}
+
+// ══════════════════════════════════════
+//  SAMPLE DATA
+// ══════════════════════════════════════
+function loadSample() {
+  if (processes.length && !confirm('기존 데이터를 지우고 샘플을 불러올까요?')) return;
+  processes = [];
+  procIdSeq = 1;
+  const sample = [
+    { name: '철거', planStart: 1, duration: 4, predecessor: '', delay: 0 },
+    { name: '목공', planStart: 5, duration: 4, predecessor: '철거', delay: 0 },
+    { name: '전기배선', planStart: 7, duration: 6, predecessor: '', delay: 0 },
+    { name: '타일', planStart: 3, duration: 13, predecessor: '', delay: 0 },
+    { name: '도장', planStart: 14, duration: 3, predecessor: '목공', delay: 0 },
+    { name: '마감/설치', planStart: 17, duration: 2, predecessor: '도장', delay: 0 },
+  ];
+  sample.forEach(s => {
+    const id = procIdSeq++;
+    processes.push({ id, ...s });
+  });
+  calcActual();
+  renderGanttTable();
+  renderGanttBar();
+}
+
+// ══════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════
+window.onload = function() {
+  renderGanttTable();
+  renderHolidayList();
+
+  // totalDays change redraws bar
+  document.getElementById('totalDays').addEventListener('change', () => renderGanttBar());
+};
+</script>
+</body>
+</html>
