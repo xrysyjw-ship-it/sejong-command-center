@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
+<html lang="ko"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>세종 어반아트리움 파인앤유 | RSL 커맨드센터</title>
@@ -405,13 +403,11 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 }
 </style>
 </head>
-<body>
+<body class="">
 
 <!-- EDIT TOGGLE -->
 <button class="edit-toggle" id="editToggle" onclick="toggleEdit()" title="텍스트 직접 편집 모드">✏ 편집모드</button>
-<button class="export-btn" id="exportBtn" onclick="exportHTML()" title="현재 데이터가 반영된 HTML 파일 다운로드">
-  <span class="ex-dot"></span>HTML 내보내기
-</button>
+<button class="export-btn" id="exportBtn" onclick="exportHTML()" title="현재 데이터가 반영된 HTML 파일 다운로드" disabled=""><span class="ex-dot"></span>생성 중...</button>
 
 <!-- HEADER -->
 <header class="site-header">
@@ -431,7 +427,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
       </div>
     </div>
     <div class="hdr-right">
-      <div class="hdr-date" contenteditable="false" id="headerDate">2026-03-16</div>
+      <div class="hdr-date" contenteditable="false" id="headerDate">2026-03-18</div>
       <div class="hdr-conf">CONFIDENTIAL</div>
     </div>
   </div>
@@ -452,21 +448,26 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 
 <!-- TABS -->
 <div class="tab-bar" id="tabBar">
-  <button class="tab-btn active"  data-tab="overview"  onclick="switchTab('overview')">🗂 전체보기</button>
-  <button class="tab-btn"         data-tab="office"    onclick="switchTab('office')">🏢 분양사무실</button>
-  <button class="tab-btn"         data-tab="agency"    onclick="switchTab('agency')">📝 대대행계약</button>
-  <button class="tab-btn"         data-tab="md"        onclick="switchTab('md')">🏗 분양MD</button>
-  <button class="tab-btn"         data-tab="issue"     onclick="switchTab('issue')">🔔 이슈관리</button>
-  <button class="tab-btn"         data-tab="schedule"  onclick="switchTab('schedule')">📅 일정관리</button>
-  <button class="tab-btn"         data-tab="docs"      onclick="switchTab('docs')">📁 자료·네트워크</button>
-  <button class="tab-btn"         data-tab="report"    onclick="switchTab('report')">📄 보고서</button>
+  <button class="tab-btn" data-tab="overview" onclick="switchTab('overview')">🗂 전체보기</button>
+  <button class="tab-btn" data-tab="office" onclick="switchTab('office')">🏢 분양사무실</button>
+  <button class="tab-btn" data-tab="agency" onclick="switchTab('agency')">📝 대대행계약</button>
+  <button class="tab-btn" data-tab="md" onclick="switchTab('md')">🏗 분양MD</button>
+  <button class="tab-btn" data-tab="issue" onclick="switchTab('issue')">🔔 이슈관리</button>
+  <button class="tab-btn" data-tab="schedule" onclick="switchTab('schedule')">📅 일정관리</button>
+  <button class="tab-btn active" data-tab="docs" onclick="switchTab('docs')">📁 자료·네트워크</button>
+  <button class="tab-btn" data-tab="report" onclick="switchTab('report')">📄 보고서</button>
 </div>
 
 <div class="container">
 
   <!-- 전체보기 -->
-  <div class="panel active" id="panel-overview">
-    <div class="stats-row" id="statsRow"></div>
+  <div class="panel" id="panel-overview">
+    <div class="stats-row" id="statsRow">
+    <div class="stat-card" style="--color:var(--navy)"><div class="s-val">21</div><div class="s-lbl">전체 항목</div></div>
+    <div class="stat-card" style="--color:var(--orange)"><div class="s-val" style="color:var(--orange)">15</div><div class="s-lbl">진행중</div></div>
+    <div class="stat-card" style="--color:var(--amber)"><div class="s-val" style="color:var(--amber)">6</div><div class="s-lbl">예정</div></div>
+    <div class="stat-card" style="--color:var(--green)"><div class="s-val" style="color:var(--green)">0</div><div class="s-lbl">완료</div></div>
+  </div>
     <div class="sec-card">
       <div class="sec-hdr gold">
         <div class="sec-num">🏆</div>
@@ -479,11 +480,360 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
             <th>완료일</th><th>계약서·결과물</th>
             <th>담당</th><th>당시1</th><th>당시2</th><th>비고</th>
           </tr></thead>
-          <tbody id="honorTbody"></tbody>
+          <tbody id="honorTbody">
+    <tr>
+      <td class="td-no">I</td>
+      <td class="left td-item">분양대행계약</td>
+      <td>파인아이앤디 ↔ RSL</td><td>2026. 03. 06.</td><td>계약서 원본 (RSL 보관)</td>
+      <td>이성진</td><td>유정우</td><td>-</td>
+      <td class="left td-remark">변경익</td>
+    </tr>
+  </tbody>
         </table>
       </div>
     </div>
-    <div id="sectionCards"></div>
+    <div id="sectionCards">
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="switchTab('office')">
+        <div class="sec-num">II</div>
+        <span>분양사무실 오프닝 (161·162·163호)</span>
+        <span class="goto">상세보기 →</span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="kpi-tbl">
+          <thead><tr>
+            <th>No</th><th>항목</th><th>단계별 진행 흐름</th>
+            <th>완료예정</th><th>상태</th><th>비고</th>
+          </tr></thead>
+          <tbody>
+            
+              <tr onclick="openModal('off-1')">
+                <td class="td-no">1</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="off-1" onblur="saveField(this,'title','off-1')">행정-IT<br>인터넷 설치</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-done">인터넷 설치<br>신청 완료</span><span class="step-arrow">→</span><span class="step-box s-done">복합기 설치<br>중고구매·이전</span><span class="step-arrow">→</span><span class="step-box s-active">사무용품<br>구비</span></div></td>
+                <td class="td-due">2026.03.09</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark"></td>
+              </tr>
+            
+              <tr onclick="openModal('off-2')">
+                <td class="td-no">2</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="off-2" onblur="saveField(this,'title','off-2')">인테리어</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-done">신강건 김정훈</span><span class="step-arrow">→</span><span class="step-box s-done">착공<br>2026.03.09</span><span class="step-arrow">→</span><span class="step-box s-active">163호 시공<br>대표이사실</span><span class="step-arrow">→</span><span class="step-box s-pending">161·162호 시공<br>분양판보실</span><span class="step-arrow">→</span><span class="step-box s-pending">입주청소</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark">1,500만 / 김정훈</td>
+              </tr>
+            
+              <tr onclick="openModal('off-3')">
+                <td class="td-no">3</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="off-3" onblur="saveField(this,'title','off-3')">집기</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-done">배치도 확정<br>도면기준</span><span class="step-arrow">→</span><span class="step-box s-planned">발주<br>300만</span><span class="step-arrow">→</span><span class="step-box s-pending">납품<br>설치</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge planned"><span class="st-dot" style="background:#C28B0A"></span>예정</span></td>
+                <td class="left td-remark">집기배치도 기준 발주</td>
+              </tr>
+            
+              <tr onclick="openModal('off-4')">
+                <td class="td-no">4</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="off-4" onblur="saveField(this,'title','off-4')">기타</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-active">체재비 집행 법인카드</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark">법인카드 집행 가능</td>
+              </tr>
+            
+              <tr onclick="openModal('off-5')">
+                <td class="td-no">5</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="off-5" onblur="saveField(this,'title','off-5')">판촉물</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-planned">디자인<br>시안</span><span class="step-arrow">→</span><span class="step-box s-pending">제작<br>발주</span><span class="step-arrow">→</span><span class="step-box s-pending">납품</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge planned"><span class="st-dot" style="background:#C28B0A"></span>예정</span></td>
+                <td class="left td-remark">브로슈어·배너 등</td>
+              </tr>
+            
+              <tr onclick="openModal('off-6')">
+                <td class="td-no">6</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="off-6" onblur="saveField(this,'title','off-6')">개소식</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-planned">일정 조율<br>TBD</span><span class="step-arrow">→</span><span class="step-box s-pending">행사 일정<br>확정 TBD</span><span class="step-arrow">→</span><span class="step-box s-pending">오프닝<br>완료</span></div></td>
+                <td class="td-due">TBD</td>
+                <td class="td-status"><span class="st-badge planned"><span class="st-dot" style="background:#C28B0A"></span>예정</span></td>
+                <td class="left td-remark">유정무 주관</td>
+              </tr>
+            
+              <tr onclick="openModal('off-7')">
+                <td class="td-no">7</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="off-7" onblur="saveField(this,'title','off-7')">이주</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-planned">삼삼엠투</span><span class="step-arrow">→</span><span class="step-box s-pending">나릿재마을</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge planned"><span class="st-dot" style="background:#C28B0A"></span>예정</span></td>
+                <td class="left td-remark">이주계획서 기획안</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="switchTab('agency')">
+        <div class="sec-num">III</div>
+        <span>분양 대대행계약 (RSL ↔ 메타버스테마파크)</span>
+        <span class="goto">상세보기 →</span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="kpi-tbl">
+          <thead><tr>
+            <th>No</th><th>항목</th><th>단계별 진행 흐름</th>
+            <th>완료예정</th><th>상태</th><th>비고</th>
+          </tr></thead>
+          <tbody>
+            
+              <tr onclick="openModal('ag-1')">
+                <td class="td-no">1</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="ag-1" onblur="saveField(this,'title','ag-1')">메타버스<br>테마파크</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-done">교섭 시작<br>전관우 출동</span><span class="step-arrow">→</span><span class="step-box s-done">계약서 패키지<br>5종 준비완료</span><span class="step-arrow">→</span><span class="step-box s-active">계약금 납입<br>3,300만</span><span class="step-arrow">→</span><span class="step-box s-planned">계약 체결<br>0318</span><span class="step-arrow">→</span><span class="step-box s-pending">인감·서류<br>원본 준비</span><span class="step-arrow">→</span><span class="step-box s-pending">독점<br>대행권 확보</span></div></td>
+                <td class="td-due">0318</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark">계약금 3,300만 준비</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="switchTab('md')">
+        <div class="sec-num">IV</div>
+        <span>분양-MD 총괄 관리 마스터</span>
+        <span class="goto">상세보기 →</span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="kpi-tbl">
+          <thead><tr>
+            <th>No</th><th>항목</th><th>단계별 진행 흐름</th>
+            <th>완료예정</th><th>상태</th><th>비고</th>
+          </tr></thead>
+          <tbody>
+            
+              <tr onclick="openModal('md-1')">
+                <td class="td-no">1</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="md-1" onblur="saveField(this,'title','md-1')">4층 전체 분양<br>(차주↔파인)</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-done">교섭 완료<br>G317 농협·수협</span><span class="step-arrow">→</span><span class="step-box s-done">차주법인 리스트 수령: K농산: 분석상 합격</span><span class="step-arrow">→</span><span class="step-box s-done">IM 자료<br>검토 완료</span><span class="step-arrow">→</span><span class="step-box s-active">은행 가승인<br>준비 중</span><span class="step-arrow">→</span><span class="step-box s-active">계약서 초안<br>체결본 수령<br>(내일까지 본부장)</span><span class="step-arrow">→</span><span class="step-box s-planned">계약서<br>전달</span><span class="step-arrow">→</span><span class="step-box s-pending">분양 계약</span><span class="step-arrow">→</span><span class="step-box s-pending">계약금<br>10%</span><span class="step-arrow">→</span><span class="step-box s-pending">대출<br>심사</span><span class="step-arrow">→</span><span class="step-box s-pending">대출<br>승인<br>(90% 예상)</span><span class="step-arrow">→</span><span class="step-box s-pending">기표</span></div></td>
+                <td class="td-due">3.11~</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark">대출 90% 예상 (이성진) · IM 자료 양호 · 계약서 체결본 내일까지 본부장 수령 후 전달</td>
+              </tr>
+            
+              <tr onclick="openModal('md-2')">
+                <td class="td-no">2</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="md-2" onblur="saveField(this,'title','md-2')">B1F 사크탱크<br>(SM형)</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-done">교섭 완료<br>BIC 집속</span><span class="step-arrow">→</span><span class="step-box s-active">차주법인<br>확보 중</span><span class="step-arrow">→</span><span class="step-box s-planned">LOI 제출<br>집정의원사</span><span class="step-arrow">→</span><span class="step-box s-pending">은행 가심인<br>KB국민은행</span><span class="step-arrow">→</span><span class="step-box s-pending">분양계약</span><span class="step-arrow">→</span><span class="step-box s-pending">계약금<br>선고</span><span class="step-arrow">→</span><span class="step-box s-pending">은행<br>최대 85억</span><span class="step-arrow">→</span><span class="step-box s-pending">대출 기표</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark">토론: 1.62% / KB국민은행</td>
+              </tr>
+            
+              <tr onclick="openModal('md-3')">
+                <td class="td-no">3</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="md-3" onblur="saveField(this,'title','md-3')">1~3층 (MS형)<br>일반분양</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-planned">영업 개시</span><span class="step-arrow">→</span><span class="step-box s-pending">호실 배당<br>TM·MGM</span><span class="step-arrow">→</span><span class="step-box s-pending">분양 고객<br>선정</span><span class="step-arrow">→</span><span class="step-box s-pending">자주 선정</span><span class="step-arrow">→</span><span class="step-box s-pending">은행 가승인</span><span class="step-arrow">→</span><span class="step-box s-pending">분양계약</span><span class="step-arrow">→</span><span class="step-box s-pending">계약금<br>10%</span><span class="step-arrow">→</span><span class="step-box s-pending">대출<br>심사</span><span class="step-arrow">→</span><span class="step-box s-pending">대출<br>승인</span><span class="step-arrow">→</span><span class="step-box s-pending">기표</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge planned"><span class="st-dot" style="background:#C28B0A"></span>예정</span></td>
+                <td class="left td-remark"></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="switchTab('issue')">
+        <div class="sec-num">V</div>
+        <span>이슈관리 (지속 모니터링)</span>
+        <span class="goto">상세보기 →</span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="kpi-tbl">
+          <thead><tr>
+            <th>No</th><th>항목</th><th>단계별 진행 흐름</th>
+            <th>완료예정</th><th>상태</th><th>비고</th>
+          </tr></thead>
+          <tbody>
+            
+              <tr onclick="openModal('iss-1')">
+                <td class="td-no">1</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="iss-1" onblur="saveField(this,'title','iss-1')">431, 433, 434호</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-active">임대 초선 회의<br>(리터스부동산)</span><span class="step-arrow">→</span><span class="step-box s-planned">임차인 계약</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark">★★★=즉시 / ★★☆=주내 / ★☆☆=모니터링</td>
+              </tr>
+            
+              <tr onclick="openModal('iss-2')">
+                <td class="td-no">2</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="iss-2" onblur="saveField(this,'title','iss-2')">427~430호</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-active">중개사 접촉<br>진행중</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark"></td>
+              </tr>
+            
+              <tr onclick="openModal('iss-3')">
+                <td class="td-no">3</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="iss-3" onblur="saveField(this,'title','iss-3')">432호</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-active">중개사 접촉<br>진행중</span><span class="step-arrow">→</span><span class="step-box s-planned">0320 1시<br>미팅</span></div></td>
+                <td class="td-due">0320</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark"></td>
+              </tr>
+            
+              <tr onclick="openModal('iss-4')">
+                <td class="td-no">4</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="iss-4" onblur="saveField(this,'title','iss-4')">401~426<br>합기</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-active">현장 확인(신)</span><span class="step-arrow">→</span><span class="step-box s-planned">0317 견적서</span></div></td>
+                <td class="td-due">0317</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark"></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="switchTab('schedule')">
+        <div class="sec-num">VI</div>
+        <span>일정관리</span>
+        <span class="goto">상세보기 →</span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="kpi-tbl">
+          <thead><tr>
+            <th>No</th><th>항목</th><th>단계별 진행 흐름</th>
+            <th>완료예정</th><th>상태</th><th>비고</th>
+          </tr></thead>
+          <tbody>
+            
+              <tr onclick="openModal('sch-1')">
+                <td class="td-no">1</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="sch-1" onblur="saveField(this,'title','sch-1')">일정관리</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-done">주요 일정<br>수립</span><span class="step-arrow">→</span><span class="step-box s-active">오프닝 준비<br>03.09~</span><span class="step-arrow">→</span><span class="step-box s-active">대대행 계약<br>행·소요</span><span class="step-arrow">→</span><span class="step-box s-planned">4층 분양계약<br>3.11 전후</span><span class="step-arrow">→</span><span class="step-box s-pending">D+1 계획<br>계약후 1개월</span><span class="step-arrow">→</span><span class="step-box s-pending">연장 협의<br>계약후 3개월</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark">간트차트 별도 관리</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="switchTab('docs')">
+        <div class="sec-num">VII</div>
+        <span>관련자료 리스트</span>
+        <span class="goto">상세보기 →</span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="kpi-tbl">
+          <thead><tr>
+            <th>No</th><th>항목</th><th>단계별 진행 흐름</th>
+            <th>완료예정</th><th>상태</th><th>비고</th>
+          </tr></thead>
+          <tbody>
+            
+              <tr onclick="openModal('doc-1')">
+                <td class="td-no">1</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="doc-1" onblur="saveField(this,'title','doc-1')">계약서류</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-done">계약서류<br>정리</span><span class="step-arrow">→</span><span class="step-box s-done">분양대행<br>계약서</span><span class="step-arrow">→</span><span class="step-box s-active">대대행 패키지<br>5종 준비</span><span class="step-arrow">→</span><span class="step-box s-planned">NDA<br>배포 및 보관</span><span class="step-arrow">→</span><span class="step-box s-pending">사용인감계</span><span class="step-arrow">→</span><span class="step-box s-pending">4층<br>분양계약서</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge planned"><span class="st-dot" style="background:#C28B0A"></span>예정</span></td>
+                <td class="left td-remark">폴더 정리 후 파이어핑크 연결 예정</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="switchTab('docs')">
+        <div class="sec-num">VIII</div>
+        <span>네트워크</span>
+        <span class="goto">상세보기 →</span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="kpi-tbl">
+          <thead><tr>
+            <th>No</th><th>항목</th><th>단계별 진행 흐름</th>
+            <th>완료예정</th><th>상태</th><th>비고</th>
+          </tr></thead>
+          <tbody>
+            
+              <tr onclick="openModal('net-1')">
+                <td class="td-no">1</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="net-1" onblur="saveField(this,'title','net-1')">대관업무</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-done">세종시의회<br>부의장 이혜</span><span class="step-arrow">→</span><span class="step-box s-active">상업지원금<br>협의 진행</span><span class="step-arrow">→</span><span class="step-box s-planned">상업지 보조금<br>MD 연계</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark">세종시 네트워크 활용</td>
+              </tr>
+            
+              <tr onclick="openModal('net-2')">
+                <td class="td-no">2</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="net-2" onblur="saveField(this,'title','net-2')">상가번영회</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-done">정홍택<br>상담 완료</span><span class="step-arrow">→</span><span class="step-box s-active">이슈 보고<br>427~432호</span><span class="step-arrow">→</span><span class="step-box s-planned">협력 강화</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark">정홍택 상임회장</td>
+              </tr>
+            
+              <tr onclick="openModal('net-3')">
+                <td class="td-no">3</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="net-3" onblur="saveField(this,'title','net-3')">라디스부동산</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-done">임대 총괄<br>3층·4층</span><span class="step-arrow">→</span><span class="step-box s-active">431호 진행<br>1,000/40</span><span class="step-arrow">→</span><span class="step-box s-active">433~434호<br>1,000/60</span><span class="step-arrow">→</span><span class="step-box s-active">432호<br>협의중</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark">3층 라디스부동산 중개</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="switchTab('docs')">
+        <div class="sec-num">IX</div>
+        <span>자료리스트</span>
+        <span class="goto">상세보기 →</span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="kpi-tbl">
+          <thead><tr>
+            <th>No</th><th>항목</th><th>단계별 진행 흐름</th>
+            <th>완료예정</th><th>상태</th><th>비고</th>
+          </tr></thead>
+          <tbody>
+            
+              <tr onclick="openModal('dl-1')">
+                <td class="td-no">1</td>
+                <td class="left td-item" contenteditable="false" data-field="title" data-id="dl-1" onblur="saveField(this,'title','dl-1')">도면·현황</td>
+                <td class="td-steps"><div class="steps-flow"><span class="step-box s-done">세종시 도시자료<br>파인 수령</span><span class="step-arrow">→</span><span class="step-box s-done">어반아트리움<br>도면</span><span class="step-arrow">→</span><span class="step-box s-done">P1<br>상세도면</span><span class="step-arrow">→</span><span class="step-box s-active">임대현황 마스터<br>v4 관리중</span><span class="step-arrow">→</span><span class="step-box s-active">MD현황표<br>작성중</span><span class="step-arrow">→</span><span class="step-box s-planned">분양가<br>테이블</span></div></td>
+                <td class="td-due">-</td>
+                <td class="td-status"><span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span></td>
+                <td class="left td-remark">폴더 정리 후 원고 연결</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
   </div>
 
   <!-- 분양사무실 -->
@@ -492,7 +842,264 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
       <h2 contenteditable="false">II. 분양사무실 오프닝 (161·162·163호)</h2>
       <button class="btn btn-orange btn-sm" onclick="addItem('office')">＋ 항목 추가</button>
     </div>
-    <div id="officeDetail"></div>
+    <div id="officeDetail">
+    <p class="sub-section-title">II. 분양사무실 오프닝 (161·162·163호)</p>
+    
+  <div class="item-card" data-item-id="off-1">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">1</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="off-1" onblur="saveField(this,'title','off-1')">행정-IT
+인터넷 설치</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span>
+        <span contenteditable="false" data-field="dueDate" data-id="off-1" onblur="saveField(this,'dueDate','off-1')" style="font-size:10px;color:rgba(255,255,255,0.6)">📅 2026.03.09</span>
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('off-1')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-done">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-1" data-step="0" onblur="saveStepLabel(this,'off-1',0)">인터넷 설치 신청 완료</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-done">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-1" data-step="1" onblur="saveStepLabel(this,'off-1',1)">복합기 설치 중고구매·이전</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">03</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-1" data-step="2" onblur="saveStepLabel(this,'off-1',2)">사무용품 구비</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+      </div>
+      
+    </div>
+  </div>
+  <div class="item-card" data-item-id="off-2">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">2</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="off-2" onblur="saveField(this,'title','off-2')">인테리어</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('off-2')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-done">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-2" data-step="0" onblur="saveStepLabel(this,'off-2',0)">신강건 김정훈</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-done">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-2" data-step="1" onblur="saveStepLabel(this,'off-2',1)">착공 2026.03.09</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">03</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-2" data-step="2" onblur="saveStepLabel(this,'off-2',2)">163호 시공 대표이사실</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">04</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-2" data-step="3" onblur="saveStepLabel(this,'off-2',3)">161·162호 시공 분양판보실</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">05</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-2" data-step="4" onblur="saveStepLabel(this,'off-2',4)">입주청소</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="off-2" onblur="saveField(this,'remark','off-2')">📌 1,500만 / 김정훈</div>
+    </div>
+  </div>
+  <div class="item-card" data-item-id="off-3">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">3</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="off-3" onblur="saveField(this,'title','off-3')">집기</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge planned"><span class="st-dot" style="background:#C28B0A"></span>예정</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('off-3')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-done">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-3" data-step="0" onblur="saveStepLabel(this,'off-3',0)">배치도 확정 도면기준</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-3" data-step="1" onblur="saveStepLabel(this,'off-3',1)">발주 300만</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">03</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-3" data-step="2" onblur="saveStepLabel(this,'off-3',2)">납품 설치</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="off-3" onblur="saveField(this,'remark','off-3')">📌 집기배치도 기준 발주</div>
+    </div>
+  </div>
+  <div class="item-card" data-item-id="off-4">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">4</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="off-4" onblur="saveField(this,'title','off-4')">기타</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('off-4')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-active">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-4" data-step="0" onblur="saveStepLabel(this,'off-4',0)">체재비 집행 법인카드</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="off-4" onblur="saveField(this,'remark','off-4')">📌 법인카드 집행 가능</div>
+    </div>
+  </div>
+  <div class="item-card" data-item-id="off-5">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">5</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="off-5" onblur="saveField(this,'title','off-5')">판촉물</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge planned"><span class="st-dot" style="background:#C28B0A"></span>예정</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('off-5')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-5" data-step="0" onblur="saveStepLabel(this,'off-5',0)">디자인 시안</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-5" data-step="1" onblur="saveStepLabel(this,'off-5',1)">제작 발주</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">03</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-5" data-step="2" onblur="saveStepLabel(this,'off-5',2)">납품</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="off-5" onblur="saveField(this,'remark','off-5')">📌 브로슈어·배너 등</div>
+    </div>
+  </div>
+  <div class="item-card" data-item-id="off-6">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">6</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="off-6" onblur="saveField(this,'title','off-6')">개소식</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge planned"><span class="st-dot" style="background:#C28B0A"></span>예정</span>
+        <span contenteditable="false" data-field="dueDate" data-id="off-6" onblur="saveField(this,'dueDate','off-6')" style="font-size:10px;color:rgba(255,255,255,0.6)">📅 TBD</span>
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('off-6')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-6" data-step="0" onblur="saveStepLabel(this,'off-6',0)">일정 조율 TBD</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-6" data-step="1" onblur="saveStepLabel(this,'off-6',1)">행사 일정 확정 TBD</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">03</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-6" data-step="2" onblur="saveStepLabel(this,'off-6',2)">오프닝 완료</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="off-6" onblur="saveField(this,'remark','off-6')">📌 유정무 주관</div>
+    </div>
+  </div>
+  <div class="item-card" data-item-id="off-7">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">7</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="off-7" onblur="saveField(this,'title','off-7')">이주</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge planned"><span class="st-dot" style="background:#C28B0A"></span>예정</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('off-7')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-7" data-step="0" onblur="saveStepLabel(this,'off-7',0)">삼삼엠투</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="off-7" data-step="1" onblur="saveStepLabel(this,'off-7',1)">나릿재마을</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="off-7" onblur="saveField(this,'remark','off-7')">📌 이주계획서 기획안</div>
+    </div>
+  </div>
+  </div>
   </div>
 
   <!-- 대대행계약 -->
@@ -510,7 +1117,244 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
       <h2 contenteditable="false">IV. 분양-MD 총괄 관리 마스터</h2>
       <button class="btn btn-orange btn-sm" onclick="addItem('md')">＋ 항목 추가</button>
     </div>
-    <div id="mdDetail"></div>
+    <div id="mdDetail">
+    <p class="sub-section-title">IV. 분양-MD 총괄 관리 마스터</p>
+    
+  <div class="item-card" data-item-id="md-1">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">1</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="md-1" onblur="saveField(this,'title','md-1')">4층 전체 분양
+(차주↔파인)</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span>
+        <span contenteditable="false" data-field="dueDate" data-id="md-1" onblur="saveField(this,'dueDate','md-1')" style="font-size:10px;color:rgba(255,255,255,0.6)">📅 3.11~</span>
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('md-1')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-done">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-1" data-step="0" onblur="saveStepLabel(this,'md-1',0)">교섭 완료 G317 농협·수협</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-done">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-1" data-step="1" onblur="saveStepLabel(this,'md-1',1)">차주법인 리스트 수령: K농산: 분석상 합격</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-done">
+            <span class="step-idx">03</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-1" data-step="2" onblur="saveStepLabel(this,'md-1',2)">IM 자료 검토 완료</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">04</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-1" data-step="3" onblur="saveStepLabel(this,'md-1',3)">은행 가승인 준비 중</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">05</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-1" data-step="4" onblur="saveStepLabel(this,'md-1',4)">계약서 초안 체결본 수령 (내일까지 본부장)</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">06</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-1" data-step="5" onblur="saveStepLabel(this,'md-1',5)">계약서 전달</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">07</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-1" data-step="6" onblur="saveStepLabel(this,'md-1',6)">분양 계약</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">08</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-1" data-step="7" onblur="saveStepLabel(this,'md-1',7)">계약금 10%</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">09</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-1" data-step="8" onblur="saveStepLabel(this,'md-1',8)">대출 심사</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">010</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-1" data-step="9" onblur="saveStepLabel(this,'md-1',9)">대출 승인 (90% 예상)</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">011</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-1" data-step="10" onblur="saveStepLabel(this,'md-1',10)">기표</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="md-1" onblur="saveField(this,'remark','md-1')">📌 대출 90% 예상 (이성진) · IM 자료 양호 · 계약서 체결본 내일까지 본부장 수령 후 전달</div>
+    </div>
+  </div>
+  <div class="item-card" data-item-id="md-2">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">2</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="md-2" onblur="saveField(this,'title','md-2')">B1F 사크탱크
+(SM형)</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('md-2')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-done">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-2" data-step="0" onblur="saveStepLabel(this,'md-2',0)">교섭 완료 BIC 집속</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-2" data-step="1" onblur="saveStepLabel(this,'md-2',1)">차주법인 확보 중</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">03</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-2" data-step="2" onblur="saveStepLabel(this,'md-2',2)">LOI 제출 집정의원사</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">04</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-2" data-step="3" onblur="saveStepLabel(this,'md-2',3)">은행 가심인 KB국민은행</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">05</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-2" data-step="4" onblur="saveStepLabel(this,'md-2',4)">분양계약</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">06</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-2" data-step="5" onblur="saveStepLabel(this,'md-2',5)">계약금 선고</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">07</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-2" data-step="6" onblur="saveStepLabel(this,'md-2',6)">은행 최대 85억</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">08</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-2" data-step="7" onblur="saveStepLabel(this,'md-2',7)">대출 기표</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="md-2" onblur="saveField(this,'remark','md-2')">📌 토론: 1.62% / KB국민은행</div>
+    </div>
+  </div>
+  <div class="item-card" data-item-id="md-3">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">3</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="md-3" onblur="saveField(this,'title','md-3')">1~3층 (MS형)
+일반분양</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge planned"><span class="st-dot" style="background:#C28B0A"></span>예정</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('md-3')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-3" data-step="0" onblur="saveStepLabel(this,'md-3',0)">영업 개시</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-3" data-step="1" onblur="saveStepLabel(this,'md-3',1)">호실 배당 TM·MGM</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">03</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-3" data-step="2" onblur="saveStepLabel(this,'md-3',2)">분양 고객 선정</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">04</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-3" data-step="3" onblur="saveStepLabel(this,'md-3',3)">자주 선정</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">05</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-3" data-step="4" onblur="saveStepLabel(this,'md-3',4)">은행 가승인</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">06</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-3" data-step="5" onblur="saveStepLabel(this,'md-3',5)">분양계약</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">07</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-3" data-step="6" onblur="saveStepLabel(this,'md-3',6)">계약금 10%</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">08</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-3" data-step="7" onblur="saveStepLabel(this,'md-3',7)">대출 심사</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">09</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-3" data-step="8" onblur="saveStepLabel(this,'md-3',8)">대출 승인</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">010</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="md-3" data-step="9" onblur="saveStepLabel(this,'md-3',9)">기표</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+      </div>
+      
+    </div>
+  </div>
+  </div>
   </div>
 
   <!-- 이슈관리 -->
@@ -519,19 +1363,435 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
       <h2 contenteditable="false">V. 이슈관리 (지속 모니터링)</h2>
       <button class="btn btn-orange btn-sm" onclick="addItem('issue')">＋ 항목 추가</button>
     </div>
-    <div id="issueDetail"></div>
+    <div id="issueDetail">
+    <p class="sub-section-title">V. 이슈관리 (지속 모니터링)</p>
+    
+  <div class="item-card" data-item-id="iss-1">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">1</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="iss-1" onblur="saveField(this,'title','iss-1')">431, 433, 434호</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('iss-1')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-active">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="iss-1" data-step="0" onblur="saveStepLabel(this,'iss-1',0)">임대 초선 회의 (리터스부동산)</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="iss-1" data-step="1" onblur="saveStepLabel(this,'iss-1',1)">임차인 계약</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="iss-1" onblur="saveField(this,'remark','iss-1')">📌 ★★★=즉시 / ★★☆=주내 / ★☆☆=모니터링</div>
+    </div>
+  </div>
+  <div class="item-card" data-item-id="iss-2">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">2</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="iss-2" onblur="saveField(this,'title','iss-2')">427~430호</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('iss-2')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-active">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="iss-2" data-step="0" onblur="saveStepLabel(this,'iss-2',0)">중개사 접촉 진행중</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+      </div>
+      
+    </div>
+  </div>
+  <div class="item-card" data-item-id="iss-3">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">3</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="iss-3" onblur="saveField(this,'title','iss-3')">432호</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span>
+        <span contenteditable="false" data-field="dueDate" data-id="iss-3" onblur="saveField(this,'dueDate','iss-3')" style="font-size:10px;color:rgba(255,255,255,0.6)">📅 0320</span>
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('iss-3')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-active">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="iss-3" data-step="0" onblur="saveStepLabel(this,'iss-3',0)">중개사 접촉 진행중</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="iss-3" data-step="1" onblur="saveStepLabel(this,'iss-3',1)">0320 1시 미팅</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+      </div>
+      
+    </div>
+  </div>
+  <div class="item-card" data-item-id="iss-4">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">4</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="iss-4" onblur="saveField(this,'title','iss-4')">401~426
+합기</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span>
+        <span contenteditable="false" data-field="dueDate" data-id="iss-4" onblur="saveField(this,'dueDate','iss-4')" style="font-size:10px;color:rgba(255,255,255,0.6)">📅 0317</span>
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('iss-4')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-active">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="iss-4" data-step="0" onblur="saveStepLabel(this,'iss-4',0)">현장 확인(신)</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="iss-4" data-step="1" onblur="saveStepLabel(this,'iss-4',1)">0317 견적서</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+      </div>
+      
+    </div>
+  </div>
+  </div>
   </div>
 
   <!-- 일정관리 -->
   <div class="panel" id="panel-schedule">
     <div class="det-hdr"><h2 contenteditable="false">VI. 일정관리</h2></div>
-    <div id="scheduleDetail"></div>
+    <div id="scheduleDetail">
+    <p class="sub-section-title">VI. 일정관리</p>
+    
+  <div class="item-card" data-item-id="sch-1">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">1</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="sch-1" onblur="saveField(this,'title','sch-1')">일정관리</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('sch-1')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-done">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="sch-1" data-step="0" onblur="saveStepLabel(this,'sch-1',0)">주요 일정 수립</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="sch-1" data-step="1" onblur="saveStepLabel(this,'sch-1',1)">오프닝 준비 03.09~</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">03</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="sch-1" data-step="2" onblur="saveStepLabel(this,'sch-1',2)">대대행 계약 행·소요</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">04</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="sch-1" data-step="3" onblur="saveStepLabel(this,'sch-1',3)">4층 분양계약 3.11 전후</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">05</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="sch-1" data-step="4" onblur="saveStepLabel(this,'sch-1',4)">D+1 계획 계약후 1개월</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">06</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="sch-1" data-step="5" onblur="saveStepLabel(this,'sch-1',5)">연장 협의 계약후 3개월</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="sch-1" onblur="saveField(this,'remark','sch-1')">📌 간트차트 별도 관리</div>
+    </div>
+  </div>
+  </div>
   </div>
 
   <!-- 자료·네트워크 -->
-  <div class="panel" id="panel-docs">
+  <div class="panel active" id="panel-docs">
     <div class="det-hdr"><h2 contenteditable="false">VII–IX. 자료 · 네트워크 · 자료리스트</h2></div>
-    <div id="docsDetail"></div>
+    <div id="docsDetail">
+    <p class="sub-section-title">VII. 관련자료 리스트</p>
+    
+  <div class="item-card" data-item-id="doc-1">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">1</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="doc-1" onblur="saveField(this,'title','doc-1')">계약서류</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge planned"><span class="st-dot" style="background:#C28B0A"></span>예정</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('doc-1')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-done">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="doc-1" data-step="0" onblur="saveStepLabel(this,'doc-1',0)">계약서류 정리</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-done">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="doc-1" data-step="1" onblur="saveStepLabel(this,'doc-1',1)">분양대행 계약서</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">03</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="doc-1" data-step="2" onblur="saveStepLabel(this,'doc-1',2)">대대행 패키지 5종 준비</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">04</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="doc-1" data-step="3" onblur="saveStepLabel(this,'doc-1',3)">NDA 배포 및 보관</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">05</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="doc-1" data-step="4" onblur="saveStepLabel(this,'doc-1',4)">사용인감계</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+          <div class="step-row s-pending">
+            <span class="step-idx">06</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="doc-1" data-step="5" onblur="saveStepLabel(this,'doc-1',5)">4층 분양계약서</span>
+            <span class="step-st-tag" style="color:var(--slate)">미시작</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="doc-1" onblur="saveField(this,'remark','doc-1')">📌 폴더 정리 후 파이어핑크 연결 예정</div>
+    </div>
+  </div>
+  
+    <p class="sub-section-title">VIII. 네트워크</p>
+    
+  <div class="item-card" data-item-id="net-1">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">1</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="net-1" onblur="saveField(this,'title','net-1')">대관업무</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('net-1')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-done">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="net-1" data-step="0" onblur="saveStepLabel(this,'net-1',0)">세종시의회 부의장 이혜</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="net-1" data-step="1" onblur="saveStepLabel(this,'net-1',1)">상업지원금 협의 진행</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">03</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="net-1" data-step="2" onblur="saveStepLabel(this,'net-1',2)">상업지 보조금 MD 연계</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="net-1" onblur="saveField(this,'remark','net-1')">📌 세종시 네트워크 활용</div>
+    </div>
+  </div>
+  <div class="item-card" data-item-id="net-2">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">2</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="net-2" onblur="saveField(this,'title','net-2')">상가번영회</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('net-2')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-done">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="net-2" data-step="0" onblur="saveStepLabel(this,'net-2',0)">정홍택 상담 완료</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="net-2" data-step="1" onblur="saveStepLabel(this,'net-2',1)">이슈 보고 427~432호</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">03</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="net-2" data-step="2" onblur="saveStepLabel(this,'net-2',2)">협력 강화</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="net-2" onblur="saveField(this,'remark','net-2')">📌 정홍택 상임회장</div>
+    </div>
+  </div>
+  <div class="item-card" data-item-id="net-3">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">3</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="net-3" onblur="saveField(this,'title','net-3')">라디스부동산</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('net-3')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-done">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="net-3" data-step="0" onblur="saveStepLabel(this,'net-3',0)">임대 총괄 3층·4층</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="net-3" data-step="1" onblur="saveStepLabel(this,'net-3',1)">431호 진행 1,000/40</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">03</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="net-3" data-step="2" onblur="saveStepLabel(this,'net-3',2)">433~434호 1,000/60</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">04</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="net-3" data-step="3" onblur="saveStepLabel(this,'net-3',3)">432호 협의중</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="net-3" onblur="saveField(this,'remark','net-3')">📌 3층 라디스부동산 중개</div>
+    </div>
+  </div>
+  
+    <p class="sub-section-title">IX. 자료리스트</p>
+    
+  <div class="item-card" data-item-id="dl-1">
+    <div class="item-card-hdr">
+      <div class="item-card-title">
+        <div class="item-no">1</div>
+        <strong style="font-size:12px;white-space:pre-line" contenteditable="false" data-field="title" data-id="dl-1" onblur="saveField(this,'title','dl-1')">도면·현황</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="st-badge progress"><span class="st-dot" style="background:#E87722"></span>진행중</span>
+        
+        <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.12);color:white;border-color:rgba(255,255,255,0.2)" onclick="openModal('dl-1')">✏ 편집</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="steps-vertical">
+        
+          <div class="step-row s-done">
+            <span class="step-idx">01</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="dl-1" data-step="0" onblur="saveStepLabel(this,'dl-1',0)">세종시 도시자료 파인 수령</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-done">
+            <span class="step-idx">02</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="dl-1" data-step="1" onblur="saveStepLabel(this,'dl-1',1)">어반아트리움 도면</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-done">
+            <span class="step-idx">03</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="dl-1" data-step="2" onblur="saveStepLabel(this,'dl-1',2)">P1 상세도면</span>
+            <span class="step-st-tag" style="color:var(--green)">완료</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">04</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="dl-1" data-step="3" onblur="saveStepLabel(this,'dl-1',3)">임대현황 마스터 v4 관리중</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-active">
+            <span class="step-idx">05</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="dl-1" data-step="4" onblur="saveStepLabel(this,'dl-1',4)">MD현황표 작성중</span>
+            <span class="step-st-tag" style="color:var(--orange)">진행중</span>
+          </div>
+        
+          <div class="step-row s-planned">
+            <span class="step-idx">06</span>
+            <span class="step-name" contenteditable="false" data-field="step-label" data-id="dl-1" data-step="5" onblur="saveStepLabel(this,'dl-1',5)">분양가 테이블</span>
+            <span class="step-st-tag" style="color:var(--amber)">예정</span>
+          </div>
+        
+      </div>
+      <div class="remark-bar" contenteditable="false" data-field="remark" data-id="dl-1" onblur="saveField(this,'remark','dl-1')">📌 폴더 정리 후 원고 연결</div>
+    </div>
+  </div>
+  </div>
   </div>
 
   <!-- 보고서 -->
@@ -557,10 +1817,82 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 <div class="modal-overlay" id="itemModal">
   <div class="modal-sheet">
     <div class="modal-hdr">
-      <h3 id="modalTitle">항목 편집</h3>
+      <h3 id="modalTitle">인테리어 편집</h3>
       <button class="btn btn-ghost btn-sm" onclick="closeModal()">✕ 닫기</button>
     </div>
-    <div id="modalBody"></div>
+    <div id="modalBody">
+    <div class="form-group">
+      <label class="form-label">전체 상태</label>
+      <select id="md_status" class="form-select">
+        <option value="done">완료</option><option value="progress" selected="">진행중</option><option value="planned">예정</option><option value="pending">미시작</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">완료 예정일</label>
+      <input id="md_due" class="form-input" type="text" value="" placeholder="예: 2026.03.18">
+    </div>
+    <div class="form-group">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <label class="form-label">진행 단계</label>
+        <button class="btn btn-ghost btn-sm" onclick="addStep('off-2')">＋ 단계 추가</button>
+      </div>
+      <div class="modal-steps-list" id="modalStepsList">
+    <div class="modal-step-row" draggable="true" data-step-idx="0">
+      <div class="drag-handle" title="드래그하여 순서 변경"><span></span><span></span><span></span></div>
+      <div class="step-idx-circle">1</div>
+      <input class="modal-step-input" type="text" value="사공사 선정 김정호 대표" oninput="DATA.sections.forEach(sec=&gt;sec.items.forEach(x=&gt;{if(x.id==='off-2')x.steps[0].label=this.value}))">
+      <select class="modal-step-sel" onchange="DATA.sections.forEach(sec=&gt;sec.items.forEach(x=&gt;{if(x.id==='off-2')x.steps[0].status=this.value}))">
+        <option value="done" selected="">완료</option><option value="progress">진행중</option><option value="planned">예정</option><option value="pending">미시작</option>
+      </select>
+      <button class="modal-step-del" onclick="removeStep('off-2',0)">✕</button>
+    </div>
+  
+    <div class="modal-step-row" draggable="true" data-step-idx="1">
+      <div class="drag-handle" title="드래그하여 순서 변경"><span></span><span></span><span></span></div>
+      <div class="step-idx-circle">2</div>
+      <input class="modal-step-input" type="text" value="착공 2026.03.09" oninput="DATA.sections.forEach(sec=&gt;sec.items.forEach(x=&gt;{if(x.id==='off-2')x.steps[1].label=this.value}))">
+      <select class="modal-step-sel" onchange="DATA.sections.forEach(sec=&gt;sec.items.forEach(x=&gt;{if(x.id==='off-2')x.steps[1].status=this.value}))">
+        <option value="done" selected="">완료</option><option value="progress">진행중</option><option value="planned">예정</option><option value="pending">미시작</option>
+      </select>
+      <button class="modal-step-del" onclick="removeStep('off-2',1)">✕</button>
+    </div>
+  
+    <div class="modal-step-row" draggable="true" data-step-idx="2">
+      <div class="drag-handle" title="드래그하여 순서 변경"><span></span><span></span><span></span></div>
+      <div class="step-idx-circle">3</div>
+      <input class="modal-step-input" type="text" value="163호 시공 대표이사실" oninput="DATA.sections.forEach(sec=&gt;sec.items.forEach(x=&gt;{if(x.id==='off-2')x.steps[2].label=this.value}))">
+      <select class="modal-step-sel" onchange="DATA.sections.forEach(sec=&gt;sec.items.forEach(x=&gt;{if(x.id==='off-2')x.steps[2].status=this.value}))">
+        <option value="done">완료</option><option value="progress" selected="">진행중</option><option value="planned">예정</option><option value="pending">미시작</option>
+      </select>
+      <button class="modal-step-del" onclick="removeStep('off-2',2)">✕</button>
+    </div>
+  
+    <div class="modal-step-row" draggable="true" data-step-idx="3">
+      <div class="drag-handle" title="드래그하여 순서 변경"><span></span><span></span><span></span></div>
+      <div class="step-idx-circle">4</div>
+      <input class="modal-step-input" type="text" value="161·162호 시공 분양판보실" oninput="DATA.sections.forEach(sec=&gt;sec.items.forEach(x=&gt;{if(x.id==='off-2')x.steps[3].label=this.value}))">
+      <select class="modal-step-sel" onchange="DATA.sections.forEach(sec=&gt;sec.items.forEach(x=&gt;{if(x.id==='off-2')x.steps[3].status=this.value}))">
+        <option value="done">완료</option><option value="progress">진행중</option><option value="planned">예정</option><option value="pending" selected="">미시작</option>
+      </select>
+      <button class="modal-step-del" onclick="removeStep('off-2',3)">✕</button>
+    </div>
+  
+    <div class="modal-step-row" draggable="true" data-step-idx="4">
+      <div class="drag-handle" title="드래그하여 순서 변경"><span></span><span></span><span></span></div>
+      <div class="step-idx-circle">5</div>
+      <input class="modal-step-input" type="text" value="입주청소" oninput="DATA.sections.forEach(sec=&gt;sec.items.forEach(x=&gt;{if(x.id==='off-2')x.steps[4].label=this.value}))">
+      <select class="modal-step-sel" onchange="DATA.sections.forEach(sec=&gt;sec.items.forEach(x=&gt;{if(x.id==='off-2')x.steps[4].status=this.value}))">
+        <option value="done">완료</option><option value="progress">진행중</option><option value="planned">예정</option><option value="pending" selected="">미시작</option>
+      </select>
+      <button class="modal-step-del" onclick="removeStep('off-2',4)">✕</button>
+    </div>
+  </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">비고</label>
+      <input id="md_remark" class="form-input" type="text" value="1,500만 / 김정호 대표" placeholder="비고 내용">
+    </div>
+  </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
       <button class="btn btn-ghost btn-sm" onclick="closeModal()">취소</button>
       <button class="btn btn-orange" onclick="saveModal()">저장</button>
@@ -614,228 +1946,677 @@ const ST = {
 
 // ══════════════ DATA ══════════════
 let DATA = {
-  honor: [
-    { category:'I', title:'분양대행계약', sub:'파인아이앤디 ↔ RSL',
-      date:'2026. 03. 06.', doc:'계약서 원본 (RSL 보관)',
-      manager:'이성진', p1:'유정우', p2:'', remark:'변경익' }
+  "honor": [
+    {
+      "category": "I",
+      "title": "분양대행계약",
+      "sub": "파인아이앤디 ↔ RSL",
+      "date": "2026. 03. 06.",
+      "doc": "계약서 원본 (RSL 보관)",
+      "manager": "이성진",
+      "p1": "유정우",
+      "p2": "",
+      "remark": "변경익"
+    }
   ],
-  sections: [
+  "sections": [
     {
-      id:'office', num:'II', title:'분양사무실 오프닝 (161·162·163호)', tabPanel:'office',
-      items:[
-        { id:'off-1', no:1, title:'행정-IT\n인터넷 설치', dueDate:'2026.03.09', manager:'', status:'progress', remark:'',
-          steps:[
-            {label:'인터넷 설치\n신청 완료',    status:'done'},
-            {label:'복합기 설치\n중고구매·이전', status:'done'},
-            {label:'사무용품\n구비',            status:'progress'}
+      "id": "office",
+      "num": "II",
+      "title": "분양사무실 오프닝 (161·162·163호)",
+      "tabPanel": "office",
+      "items": [
+        {
+          "id": "off-1",
+          "no": 1,
+          "title": "행정-IT\n인터넷 설치",
+          "dueDate": "2026.03.09",
+          "manager": "",
+          "status": "progress",
+          "remark": "",
+          "steps": [
+            {
+              "label": "인터넷 설치\n신청 완료",
+              "status": "done"
+            },
+            {
+              "label": "복합기 설치\n중고구매·이전",
+              "status": "done"
+            },
+            {
+              "label": "사무용품\n구비",
+              "status": "progress"
+            }
           ]
         },
-        { id:'off-2', no:2, title:'인테리어', dueDate:'', manager:'', status:'progress', remark:'1,500만 / 김정호 대표',
-          steps:[
-            {label:'사공사 선정\n김정호 대표',  status:'done'},
-            {label:'착공\n2026.03.09',         status:'done'},
-            {label:'163호 시공\n대표이사실',     status:'progress'},
-            {label:'161·162호 시공\n분양판보실', status:'pending'},
-            {label:'입주청소',                  status:'pending'}
+        {
+          "id": "off-2",
+          "no": 2,
+          "title": "인테리어",
+          "dueDate": "",
+          "manager": "",
+          "status": "progress",
+          "remark": "1,500만 / 김정훈",
+          "steps": [
+            {
+              "label": "신강건 김정훈",
+              "status": "done"
+            },
+            {
+              "label": "착공\n2026.03.09",
+              "status": "done"
+            },
+            {
+              "label": "163호 시공\n대표이사실",
+              "status": "progress"
+            },
+            {
+              "label": "161·162호 시공\n분양판보실",
+              "status": "pending"
+            },
+            {
+              "label": "입주청소",
+              "status": "pending"
+            }
           ]
         },
-        { id:'off-3', no:3, title:'집기', dueDate:'', manager:'', status:'planned', remark:'집기배치도 기준 발주',
-          steps:[
-            {label:'배치도 확정\n도면기준', status:'done'},
-            {label:'발주\n300만',          status:'planned'},
-            {label:'납품\n설치',           status:'pending'}
+        {
+          "id": "off-3",
+          "no": 3,
+          "title": "집기",
+          "dueDate": "",
+          "manager": "",
+          "status": "planned",
+          "remark": "집기배치도 기준 발주",
+          "steps": [
+            {
+              "label": "배치도 확정\n도면기준",
+              "status": "done"
+            },
+            {
+              "label": "발주\n300만",
+              "status": "planned"
+            },
+            {
+              "label": "납품\n설치",
+              "status": "pending"
+            }
           ]
         },
-        { id:'off-4', no:4, title:'기타', dueDate:'', manager:'', status:'progress', remark:'법인카드 집행 가능',
-          steps:[{label:'제재비 집행\n법인카드', status:'progress'}]
-        },
-        { id:'off-5', no:5, title:'판촉물', dueDate:'', manager:'', status:'planned', remark:'브로슈어·배너 등',
-          steps:[
-            {label:'디자인\n시안',  status:'planned'},
-            {label:'제작\n발주',    status:'pending'},
-            {label:'납품',         status:'pending'}
+        {
+          "id": "off-4",
+          "no": 4,
+          "title": "기타",
+          "dueDate": "",
+          "manager": "",
+          "status": "progress",
+          "remark": "법인카드 집행 가능",
+          "steps": [
+            {
+              "label": "체재비 집행 법인카드",
+              "status": "progress"
+            }
           ]
         },
-        { id:'off-6', no:6, title:'개소식', dueDate:'TBD', manager:'유정무', status:'planned', remark:'유정무 주관',
-          steps:[
-            {label:'일정 조율\nTBD',     status:'planned'},
-            {label:'행사 일정\n확정 TBD', status:'pending'},
-            {label:'오프닝\n완료',        status:'pending'}
+        {
+          "id": "off-5",
+          "no": 5,
+          "title": "판촉물",
+          "dueDate": "",
+          "manager": "",
+          "status": "planned",
+          "remark": "브로슈어·배너 등",
+          "steps": [
+            {
+              "label": "디자인\n시안",
+              "status": "planned"
+            },
+            {
+              "label": "제작\n발주",
+              "status": "pending"
+            },
+            {
+              "label": "납품",
+              "status": "pending"
+            }
           ]
         },
-        { id:'off-7', no:7, title:'이주', dueDate:'', manager:'', status:'planned', remark:'이주계획서 기획안',
-          steps:[
-            {label:'삼삼엔투',    status:'planned'},
-            {label:'나침재마을',  status:'pending'}
+        {
+          "id": "off-6",
+          "no": 6,
+          "title": "개소식",
+          "dueDate": "TBD",
+          "manager": "유정무",
+          "status": "planned",
+          "remark": "유정무 주관",
+          "steps": [
+            {
+              "label": "일정 조율\nTBD",
+              "status": "planned"
+            },
+            {
+              "label": "행사 일정\n확정 TBD",
+              "status": "pending"
+            },
+            {
+              "label": "오프닝\n완료",
+              "status": "pending"
+            }
+          ]
+        },
+        {
+          "id": "off-7",
+          "no": 7,
+          "title": "이주",
+          "dueDate": "",
+          "manager": "",
+          "status": "planned",
+          "remark": "이주계획서 기획안",
+          "steps": [
+            {
+              "label": "삼삼엠투",
+              "status": "planned"
+            },
+            {
+              "label": "나릿재마을",
+              "status": "pending"
+            }
           ]
         }
       ]
     },
     {
-      id:'agency', num:'III', title:'분양 대대행계약 (RSL ↔ 메타버스테마파크)', tabPanel:'agency',
-      items:[
-        { id:'ag-1', no:1, title:'메타버스\n테마파크', dueDate:'0318', manager:'전관우', status:'progress', remark:'계약금 3,300만 준비',
-          steps:[
-            {label:'교섭 시작\n전관우 출동',     status:'done'},
-            {label:'계약서 패키지\n5종 준비완료', status:'done'},
-            {label:'계약금 납입\n3,300만',       status:'progress'},
-            {label:'계약 체결\n0318',            status:'planned'},
-            {label:'인감·서류\n원본 준비',        status:'pending'},
-            {label:'독점\n대행권 확보',           status:'pending'}
+      "id": "agency",
+      "num": "III",
+      "title": "분양 대대행계약 (RSL ↔ 메타버스테마파크)",
+      "tabPanel": "agency",
+      "items": [
+        {
+          "id": "ag-1",
+          "no": 1,
+          "title": "메타버스\n테마파크",
+          "dueDate": "0318",
+          "manager": "전관우",
+          "status": "progress",
+          "remark": "계약금 3,300만 준비",
+          "steps": [
+            {
+              "label": "교섭 시작\n전관우 출동",
+              "status": "done"
+            },
+            {
+              "label": "계약서 패키지\n5종 준비완료",
+              "status": "done"
+            },
+            {
+              "label": "계약금 납입\n3,300만",
+              "status": "progress"
+            },
+            {
+              "label": "계약 체결\n0318",
+              "status": "planned"
+            },
+            {
+              "label": "인감·서류\n원본 준비",
+              "status": "pending"
+            },
+            {
+              "label": "독점\n대행권 확보",
+              "status": "pending"
+            }
           ]
         }
       ]
     },
     {
-      id:'md', num:'IV', title:'분양-MD 총괄 관리 마스터', tabPanel:'md',
-      items:[
-        { id:'md-1', no:1, title:'4층 전체 분양\n(차주↔파인)', dueDate:'3.11~', manager:'', status:'progress', remark:'대출 90% 예상 (이성진) · IM 자료 양호 · 계약서 체결본 내일까지 본부장 수령 후 전달',
-          steps:[
-            {label:'교섭 완료\nG317 농협·수협',    status:'done'},
-            {label:'차주법인\n리스트 수령',         status:'done'},
-            {label:'IM 자료\n검토 완료',           status:'done'},
-            {label:'은행 가승인\n준비 중',          status:'progress'},
-            {label:'계약서 초안\n체결본 수령\n(내일까지 본부장)', status:'progress'},
-            {label:'계약서\n전달',                status:'planned'},
-            {label:'분양 계약',                   status:'pending'},
-            {label:'계약금\n10%',                status:'pending'},
-            {label:'대출\n심사',                 status:'pending'},
-            {label:'대출\n승인\n(90% 예상)',      status:'pending'},
-            {label:'기표',                       status:'pending'}
+      "id": "md",
+      "num": "IV",
+      "title": "분양-MD 총괄 관리 마스터",
+      "tabPanel": "md",
+      "items": [
+        {
+          "id": "md-1",
+          "no": 1,
+          "title": "4층 전체 분양\n(차주↔파인)",
+          "dueDate": "3.11~",
+          "manager": "",
+          "status": "progress",
+          "remark": "대출 90% 예상 (이성진) · IM 자료 양호 · 계약서 체결본 내일까지 본부장 수령 후 전달",
+          "steps": [
+            {
+              "label": "교섭 완료\nG317 농협·수협",
+              "status": "done"
+            },
+            {
+              "label": "차주법인 리스트 수령: K농산: 분석상 합격",
+              "status": "done"
+            },
+            {
+              "label": "IM 자료\n검토 완료",
+              "status": "done"
+            },
+            {
+              "label": "은행 가승인\n준비 중",
+              "status": "progress"
+            },
+            {
+              "label": "계약서 초안\n체결본 수령\n(내일까지 본부장)",
+              "status": "progress"
+            },
+            {
+              "label": "계약서\n전달",
+              "status": "planned"
+            },
+            {
+              "label": "분양 계약",
+              "status": "pending"
+            },
+            {
+              "label": "계약금\n10%",
+              "status": "pending"
+            },
+            {
+              "label": "대출\n심사",
+              "status": "pending"
+            },
+            {
+              "label": "대출\n승인\n(90% 예상)",
+              "status": "pending"
+            },
+            {
+              "label": "기표",
+              "status": "pending"
+            }
           ]
         },
-        { id:'md-2', no:2, title:'B1F 사크탱크\n(SM형)', dueDate:'', manager:'', status:'progress', remark:'토론: 1.62% / KB국민은행',
-          steps:[
-            {label:'교섭 완료\nBIC 집속',         status:'done'},
-            {label:'차주법인\n확보 중',            status:'progress'},
-            {label:'LOI 제출\n집정의원사',         status:'planned'},
-            {label:'은행 가심인\nKB국민은행',      status:'pending'},
-            {label:'분양계약',                    status:'pending'},
-            {label:'계약금\n선고',                status:'pending'},
-            {label:'은행\n최대 85억',             status:'pending'},
-            {label:'대출 기표',                   status:'pending'}
+        {
+          "id": "md-2",
+          "no": 2,
+          "title": "B1F 사크탱크\n(SM형)",
+          "dueDate": "",
+          "manager": "",
+          "status": "progress",
+          "remark": "토론: 1.62% / KB국민은행",
+          "steps": [
+            {
+              "label": "교섭 완료\nBIC 집속",
+              "status": "done"
+            },
+            {
+              "label": "차주법인\n확보 중",
+              "status": "progress"
+            },
+            {
+              "label": "LOI 제출\n집정의원사",
+              "status": "planned"
+            },
+            {
+              "label": "은행 가심인\nKB국민은행",
+              "status": "pending"
+            },
+            {
+              "label": "분양계약",
+              "status": "pending"
+            },
+            {
+              "label": "계약금\n선고",
+              "status": "pending"
+            },
+            {
+              "label": "은행\n최대 85억",
+              "status": "pending"
+            },
+            {
+              "label": "대출 기표",
+              "status": "pending"
+            }
           ]
         },
-        { id:'md-3', no:3, title:'1~3층 (MS형)\n일반분양', dueDate:'', manager:'', status:'planned', remark:'',
-          steps:[
-            {label:'영업 개시',   status:'planned'},
-            {label:'호실 배당\nTM·MGM', status:'pending'},
-            {label:'분양 고객\n선정',   status:'pending'},
-            {label:'자주 선정',         status:'pending'},
-            {label:'은행 가승인',       status:'pending'},
-            {label:'분양계약',          status:'pending'},
-            {label:'계약금\n10%',      status:'pending'},
-            {label:'대출\n심사',       status:'pending'},
-            {label:'대출\n승인',       status:'pending'},
-            {label:'기표',             status:'pending'}
+        {
+          "id": "md-3",
+          "no": 3,
+          "title": "1~3층 (MS형)\n일반분양",
+          "dueDate": "",
+          "manager": "",
+          "status": "planned",
+          "remark": "",
+          "steps": [
+            {
+              "label": "영업 개시",
+              "status": "planned"
+            },
+            {
+              "label": "호실 배당\nTM·MGM",
+              "status": "pending"
+            },
+            {
+              "label": "분양 고객\n선정",
+              "status": "pending"
+            },
+            {
+              "label": "자주 선정",
+              "status": "pending"
+            },
+            {
+              "label": "은행 가승인",
+              "status": "pending"
+            },
+            {
+              "label": "분양계약",
+              "status": "pending"
+            },
+            {
+              "label": "계약금\n10%",
+              "status": "pending"
+            },
+            {
+              "label": "대출\n심사",
+              "status": "pending"
+            },
+            {
+              "label": "대출\n승인",
+              "status": "pending"
+            },
+            {
+              "label": "기표",
+              "status": "pending"
+            }
           ]
         }
       ]
     },
     {
-      id:'issue', num:'V', title:'이슈관리 (지속 모니터링)', tabPanel:'issue',
-      items:[
-        { id:'iss-1', no:1, title:'431, 433, 434호', dueDate:'', manager:'', status:'progress',
-          remark:'★★★=즉시 / ★★☆=주내 / ★☆☆=모니터링',
-          steps:[
-            {label:'임대 초선 회의\n(리터스부동산)', status:'progress'},
-            {label:'임차인 계약',                  status:'planned'}
+      "id": "issue",
+      "num": "V",
+      "title": "이슈관리 (지속 모니터링)",
+      "tabPanel": "issue",
+      "items": [
+        {
+          "id": "iss-1",
+          "no": 1,
+          "title": "431, 433, 434호",
+          "dueDate": "",
+          "manager": "",
+          "status": "progress",
+          "remark": "★★★=즉시 / ★★☆=주내 / ★☆☆=모니터링",
+          "steps": [
+            {
+              "label": "임대 초선 회의\n(리터스부동산)",
+              "status": "progress"
+            },
+            {
+              "label": "임차인 계약",
+              "status": "planned"
+            }
           ]
         },
-        { id:'iss-2', no:2, title:'427~430호', dueDate:'', manager:'', status:'progress', remark:'',
-          steps:[{label:'중개사 접촉\n진행중', status:'progress'}]
-        },
-        { id:'iss-3', no:3, title:'432호', dueDate:'0320', manager:'', status:'progress', remark:'',
-          steps:[
-            {label:'중개사 접촉\n진행중',    status:'progress'},
-            {label:'0320 1시\n미팅',         status:'planned'}
+        {
+          "id": "iss-2",
+          "no": 2,
+          "title": "427~430호",
+          "dueDate": "",
+          "manager": "",
+          "status": "progress",
+          "remark": "",
+          "steps": [
+            {
+              "label": "중개사 접촉\n진행중",
+              "status": "progress"
+            }
           ]
         },
-        { id:'iss-4', no:4, title:'401~426\n합기', dueDate:'0317', manager:'', status:'progress', remark:'',
-          steps:[
-            {label:'현장 확인(신)',  status:'progress'},
-            {label:'0317 견적서',   status:'planned'}
+        {
+          "id": "iss-3",
+          "no": 3,
+          "title": "432호",
+          "dueDate": "0320",
+          "manager": "",
+          "status": "progress",
+          "remark": "",
+          "steps": [
+            {
+              "label": "중개사 접촉\n진행중",
+              "status": "progress"
+            },
+            {
+              "label": "0320 1시\n미팅",
+              "status": "planned"
+            }
+          ]
+        },
+        {
+          "id": "iss-4",
+          "no": 4,
+          "title": "401~426\n합기",
+          "dueDate": "0317",
+          "manager": "",
+          "status": "progress",
+          "remark": "",
+          "steps": [
+            {
+              "label": "현장 확인(신)",
+              "status": "progress"
+            },
+            {
+              "label": "0317 견적서",
+              "status": "planned"
+            }
           ]
         }
       ]
     },
     {
-      id:'schedule', num:'VI', title:'일정관리', tabPanel:'schedule',
-      items:[
-        { id:'sch-1', no:1, title:'일정관리', dueDate:'', manager:'', status:'progress', remark:'간트차트 별도 관리',
-          steps:[
-            {label:'주요 일정\n수립',         status:'done'},
-            {label:'오프닝 준비\n03.09~',     status:'progress'},
-            {label:'대대행 계약\n행·소요',    status:'progress'},
-            {label:'4층 분양계약\n3.11 전후', status:'planned'},
-            {label:'D+1 계획\n계약후 1개월', status:'pending'},
-            {label:'연장 협의\n계약후 3개월', status:'pending'}
+      "id": "schedule",
+      "num": "VI",
+      "title": "일정관리",
+      "tabPanel": "schedule",
+      "items": [
+        {
+          "id": "sch-1",
+          "no": 1,
+          "title": "일정관리",
+          "dueDate": "",
+          "manager": "",
+          "status": "progress",
+          "remark": "간트차트 별도 관리",
+          "steps": [
+            {
+              "label": "주요 일정\n수립",
+              "status": "done"
+            },
+            {
+              "label": "오프닝 준비\n03.09~",
+              "status": "progress"
+            },
+            {
+              "label": "대대행 계약\n행·소요",
+              "status": "progress"
+            },
+            {
+              "label": "4층 분양계약\n3.11 전후",
+              "status": "planned"
+            },
+            {
+              "label": "D+1 계획\n계약후 1개월",
+              "status": "pending"
+            },
+            {
+              "label": "연장 협의\n계약후 3개월",
+              "status": "pending"
+            }
           ]
         }
       ]
     },
     {
-      id:'docs', num:'VII', title:'관련자료 리스트', tabPanel:'docs',
-      items:[
-        { id:'doc-1', no:1, title:'계약서류', dueDate:'', manager:'', status:'planned',
-          remark:'폴더 정리 후 파이어핑크 연결 예정',
-          steps:[
-            {label:'계약서류\n정리',          status:'done'},
-            {label:'분양대행\n계약서',         status:'done'},
-            {label:'대대행 패키지\n5종 준비',  status:'progress'},
-            {label:'NDA\n배포 및 보관',        status:'planned'},
-            {label:'사용인감계',               status:'pending'},
-            {label:'4층\n분양계약서',          status:'pending'}
+      "id": "docs",
+      "num": "VII",
+      "title": "관련자료 리스트",
+      "tabPanel": "docs",
+      "items": [
+        {
+          "id": "doc-1",
+          "no": 1,
+          "title": "계약서류",
+          "dueDate": "",
+          "manager": "",
+          "status": "planned",
+          "remark": "폴더 정리 후 파이어핑크 연결 예정",
+          "steps": [
+            {
+              "label": "계약서류\n정리",
+              "status": "done"
+            },
+            {
+              "label": "분양대행\n계약서",
+              "status": "done"
+            },
+            {
+              "label": "대대행 패키지\n5종 준비",
+              "status": "progress"
+            },
+            {
+              "label": "NDA\n배포 및 보관",
+              "status": "planned"
+            },
+            {
+              "label": "사용인감계",
+              "status": "pending"
+            },
+            {
+              "label": "4층\n분양계약서",
+              "status": "pending"
+            }
           ]
         }
       ]
     },
     {
-      id:'network', num:'VIII', title:'네트워크', tabPanel:'docs',
-      items:[
-        { id:'net-1', no:1, title:'대관업무', dueDate:'', manager:'', status:'progress', remark:'세종시 네트워크 활용',
-          steps:[
-            {label:'세종시의회\n부의장 이혜',    status:'done'},
-            {label:'상업지원금\n협의 진행',      status:'progress'},
-            {label:'상업지 보조금\nMD 연계',     status:'planned'}
+      "id": "network",
+      "num": "VIII",
+      "title": "네트워크",
+      "tabPanel": "docs",
+      "items": [
+        {
+          "id": "net-1",
+          "no": 1,
+          "title": "대관업무",
+          "dueDate": "",
+          "manager": "",
+          "status": "progress",
+          "remark": "세종시 네트워크 활용",
+          "steps": [
+            {
+              "label": "세종시의회\n부의장 이혜",
+              "status": "done"
+            },
+            {
+              "label": "상업지원금\n협의 진행",
+              "status": "progress"
+            },
+            {
+              "label": "상업지 보조금\nMD 연계",
+              "status": "planned"
+            }
           ]
         },
-        { id:'net-2', no:2, title:'상가번영회', dueDate:'', manager:'', status:'progress', remark:'정홍택 상임회장',
-          steps:[
-            {label:'정홍택\n상담 완료',        status:'done'},
-            {label:'이슈 보고\n427~432호',     status:'progress'},
-            {label:'협력 강화',               status:'planned'}
+        {
+          "id": "net-2",
+          "no": 2,
+          "title": "상가번영회",
+          "dueDate": "",
+          "manager": "",
+          "status": "progress",
+          "remark": "정홍택 상임회장",
+          "steps": [
+            {
+              "label": "정홍택\n상담 완료",
+              "status": "done"
+            },
+            {
+              "label": "이슈 보고\n427~432호",
+              "status": "progress"
+            },
+            {
+              "label": "협력 강화",
+              "status": "planned"
+            }
           ]
         },
-        { id:'net-3', no:3, title:'라디스부동산', dueDate:'', manager:'', status:'progress', remark:'3층 라디스부동산 중개',
-          steps:[
-            {label:'임대 총괄\n3층·4층',              status:'done'},
-            {label:'431호 진행\n1,000/40',            status:'progress'},
-            {label:'433~434호\n1,000/60',             status:'progress'},
-            {label:'432호\n협의중',                   status:'progress'}
+        {
+          "id": "net-3",
+          "no": 3,
+          "title": "라디스부동산",
+          "dueDate": "",
+          "manager": "",
+          "status": "progress",
+          "remark": "3층 라디스부동산 중개",
+          "steps": [
+            {
+              "label": "임대 총괄\n3층·4층",
+              "status": "done"
+            },
+            {
+              "label": "431호 진행\n1,000/40",
+              "status": "progress"
+            },
+            {
+              "label": "433~434호\n1,000/60",
+              "status": "progress"
+            },
+            {
+              "label": "432호\n협의중",
+              "status": "progress"
+            }
           ]
         }
       ]
     },
     {
-      id:'datalist', num:'IX', title:'자료리스트', tabPanel:'docs',
-      items:[
-        { id:'dl-1', no:1, title:'도면·현황', dueDate:'', manager:'', status:'progress',
-          remark:'폴더 정리 후 원고 연결',
-          steps:[
-            {label:'세종시 도시자료\n파인 수령',  status:'done'},
-            {label:'어반아트리움\n도면',           status:'done'},
-            {label:'P1\n상세도면',               status:'done'},
-            {label:'임대현황 마스터\nv4 관리중',  status:'progress'},
-            {label:'MD현황표\n작성중',            status:'progress'},
-            {label:'분양가\n테이블',              status:'planned'}
+      "id": "datalist",
+      "num": "IX",
+      "title": "자료리스트",
+      "tabPanel": "docs",
+      "items": [
+        {
+          "id": "dl-1",
+          "no": 1,
+          "title": "도면·현황",
+          "dueDate": "",
+          "manager": "",
+          "status": "progress",
+          "remark": "폴더 정리 후 원고 연결",
+          "steps": [
+            {
+              "label": "세종시 도시자료\n파인 수령",
+              "status": "done"
+            },
+            {
+              "label": "어반아트리움\n도면",
+              "status": "done"
+            },
+            {
+              "label": "P1\n상세도면",
+              "status": "done"
+            },
+            {
+              "label": "임대현황 마스터\nv4 관리중",
+              "status": "progress"
+            },
+            {
+              "label": "MD현황표\n작성중",
+              "status": "progress"
+            },
+            {
+              "label": "분양가\n테이블",
+              "status": "planned"
+            }
           ]
         }
       ]
     }
   ]
 };
-
 function loadData(){
   try{const s=localStorage.getItem('kpi_sejong_v3');if(s)DATA=JSON.parse(s);}catch(e){}
 }
@@ -1150,6 +2931,7 @@ function copyReport(){
 
 
 // ══════════════════════════════════════════════════════
+//  [내보낸 시각: 2026. 3. 18. 오후 2:31:56]
 //  EXPORT — 현재 DATA를 HTML에 반영하여 다운로드
 // ══════════════════════════════════════════════════════
 function exportHTML() {
@@ -1211,5 +2993,5 @@ document.getElementById('headerDate').textContent=new Date().toISOString().slice
 loadData();
 renderAll();
 </script>
-</body>
-</html>
+
+</body></html>
