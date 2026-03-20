@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>세종어반 CDRUS 커맨드센터</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+  /* ── 라이트 팔레트 ── */
+  --bg:        #F5F6FA;
+  --bg2:       #FFFFFF;
+  --bg3:       #F0F2F8;
+  --border:    #DDE1EC;
+  --text:      #191F2E;
+  --sub:       #444C65;
+  --muted:     #7A849E;
+  --blue:      #1A5FD4;
+  --blue-dim:  #E8F0FD;
+  --blue-dk:   #0F3D8A;
+  --green:     #1A8A40;
+  --green-dim: #E6F5EC;
+  --orange:    #C85000;
+  --orange-dim:#FEF0E6;
+  --yellow:    #8A6400;
+  --yellow-dim:#FEF8E6;
+  --red:       #C8001E;
+  --red-dim:   #FEECEF;
+  --purple:    #6B3FB5;
+  --teal:      #0A7A6A;
+  --mono:      'JetBrains Mono', monospace;
+  --sans:      'KoPub돋움체 Bold', 'KoPubDotum Bold', 'Malgun Gothic', sans-serif;
+  --shadow:    0 1px 4px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.04);
+}
+
+/* ── KDB 폰트 전체 강제 ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0; padding: 0;
+  font-family: 'KoPub돋움체 Bold', 'KoPubDotum Bold', 'Malgun Gothic', sans-serif !important;
+}
+
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--blue-dk);
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
+}
+.header-logo {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 2px;
+  border: 1.5px solid rgba(255,255,255,.6);
+  padding: 4px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.header-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  flex: 1;
+}
+.header-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,.65);
+}
+.header-badge {
+  background: var(--green);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* ── NAV TABS ── */
+.nav-tabs {
+  display: flex;
+  background: var(--bg2);
+  border-bottom: 2px solid var(--border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+.nav-tab {
+  flex-shrink: 0;
+  padding: 13px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: all .18s;
+  white-space: nowrap;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.nav-tab:hover { color: var(--blue); background: var(--blue-dim); }
+.nav-tab.active { color: var(--blue); border-bottom-color: var(--blue); background: var(--blue-dim); }
+.nav-tab-idx {
+  margin-left: auto;
+  border-left: 1px solid var(--border);
+  color: var(--sub) !important;
+}
+.nav-tab-idx:hover { color: var(--blue) !important; }
+.nav-tab-idx.active { color: var(--blue) !important; border-bottom-color: var(--blue); }
+.nav-tab .dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* ── PAGE ── */
+.page { display: none; padding: 20px 22px; max-width: 1100px; margin: 0 auto; }
+.page.active { display: block; }
+
+/* ── SECTION HEAD ── */
+.sec-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 24px 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+}
+.sec-head h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+}
+.sec-head .badge {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 700;
+}
+.badge-blue   { background: var(--blue-dim);   color: var(--blue);   border: 1px solid #a8c4f5; }
+.badge-green  { background: var(--green-dim);  color: var(--green);  border: 1px solid #a8ddc0; }
+.badge-orange { background: var(--orange-dim); color: var(--orange); border: 1px solid #f5c4a0; }
+.badge-yellow { background: var(--yellow-dim); color: var(--yellow); border: 1px solid #f0d890; }
+.badge-purple { background: #F0EBF9;           color: var(--purple); border: 1px solid #c8aef5; }
+
+/* ── KPI CARDS ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.kpi-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px 12px;
+  box-shadow: var(--shadow);
+}
+.kpi-label {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 5px;
+  letter-spacing: .3px;
+}
+.kpi-value {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+  word-break: break-all;
+}
+.kpi-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ── STATUS PILLS ── */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.status-done    { background: var(--green-dim);  color: var(--green);  }
+.status-wip     { background: var(--yellow-dim); color: var(--yellow); }
+.status-pending { background: var(--bg3);        color: var(--muted);  border: 1px solid var(--border); }
+.status-na      { background: var(--orange-dim); color: var(--orange); }
+
+/* ── DOC CHECKLIST ── */
+.doc-list { display: flex; flex-direction: column; gap: 7px; }
+.doc-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 16px;
+  cursor: pointer;
+  transition: border-color .15s, box-shadow .15s;
+  box-shadow: var(--shadow);
+}
+.doc-item:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(26,95,212,.12); }
+.doc-item.done  { border-left: 3px solid var(--green); }
+.doc-item.wip   { border-left: 3px solid var(--yellow); }
+.doc-num  { font-size: 11px; color: var(--muted); width: 28px; text-align: right; flex-shrink: 0; }
+.doc-name { font-size: 14px; font-weight: 700; flex: 1; color: var(--text); }
+.doc-timing { font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+/* ── TABLES ── */
+.est-table-wrap, .idx-wrap {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+.est-table, .idx-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.est-table th, .idx-table th {
+  background: var(--bg3);
+  color: var(--sub);
+  font-weight: 700;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  font-size: 12px;
+  letter-spacing: .3px;
+}
+.est-table th.num, .est-table td.num { text-align: right; }
+.est-table td, .idx-table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  color: var(--text);
+}
+.est-table tr:last-child td,
+.idx-table tr:last-child td { border-bottom: none; }
+.est-table tr.cat-row td {
+  background: var(--blue-dim);
+  color: var(--blue-dk);
+  font-weight: 700;
+  font-size: 12px;
+  padding: 6px 14px;
+}
+.est-table tr:hover td,
+.idx-table tr:hover td { background: var(--bg3); }
+.est-table tr.total-row td {
+  background: var(--bg3);
+  font-weight: 700;
+  border-top: 2px solid var(--border);
+}
+.idx-table .cat-sep td {
+  background: var(--blue-dim);
+  color: var(--blue-dk);
+  font-weight: 700;
+  font-size: 12px;
+  padding: 6px 14px;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  background: var(--bg3);
+  border-radius: 4px;
+  height: 8px;
+  overflow: hidden;
+  margin: 8px 0;
+  border: 1px solid var(--border);
+}
+.progress-bar {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--blue), var(--teal));
+  transition: width .6s ease;
+}
+
+/* ── TIMELINE ── */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.tl-item  { display: flex; gap: 14px; position: relative; }
+.tl-line  { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.tl-dot   { width: 13px; height: 13px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg2); flex-shrink: 0; margin-top: 4px; }
+.tl-dot.done { border-color: var(--green);  background: var(--green); }
+.tl-dot.wip  { border-color: var(--yellow); background: var(--yellow); }
+.tl-connector { width: 2px; flex: 1; background: var(--border); min-height: 24px; }
+.tl-body  { flex: 1; padding-bottom: 22px; }
+.tl-label { font-size: 14px; font-weight: 700; color: var(--text); }
+.tl-meta  { font-size: 12px; color: var(--muted); }
+
+/* ── PHOTO ── */
+.photo-drop {
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  padding: 28px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  margin-bottom: 14px;
+  background: var(--bg2);
+}
+.photo-drop:hover { border-color: var(--blue); background: var(--blue-dim); color: var(--blue); }
+.photo-drop-icon { font-size: 30px; margin-bottom: 8px; }
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+.photo-item {
+  position: relative; aspect-ratio: 1;
+  border-radius: 8px; overflow: hidden;
+  background: var(--bg3); border: 1px solid var(--border);
+  cursor: pointer; box-shadow: var(--shadow);
+}
+.photo-item img { width:100%; height:100%; object-fit:cover; }
+.photo-item .photo-label {
+  position:absolute; bottom:0; left:0; right:0;
+  background: linear-gradient(transparent, rgba(0,0,0,.75));
+  color:#fff; font-size:10px; padding:16px 7px 6px;
+}
+.photo-item .photo-del {
+  position:absolute; top:5px; right:5px;
+  background:rgba(200,0,30,.85); color:#fff; border:none;
+  border-radius:50%; width:22px; height:22px;
+  font-size:12px; cursor:pointer; display:none;
+  align-items:center; justify-content:center; line-height:1;
+}
+.photo-item:hover .photo-del { display:flex; }
+#photo-input, #photo-input-jackson { display:none; }
+
+/* ── INFO CARDS ── */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.info-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+}
+.info-card h4 { font-size: 11px; color: var(--muted); letter-spacing: .3px; margin-bottom: 10px; }
+.info-row { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+.info-row:last-child { border-bottom: none; }
+.info-row .k { color: var(--muted); }
+.info-row .v { font-weight: 700; color: var(--text); }
+
+/* ── NOTE BOX ── */
+.note-box {
+  background: var(--orange-dim);
+  border: 1px solid #f5c4a0;
+  border-left: 4px solid var(--orange);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+.note-box h4 { font-size: 13px; color: var(--orange); margin-bottom: 6px; }
+.note-box p  { font-size: 13px; color: var(--sub); line-height: 1.75; }
+
+/* ── SUBTABS ── */
+.subtab {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--sub);
+  padding: 8px 16px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s;
+  box-shadow: var(--shadow);
+}
+.subtab:hover  { border-color: var(--blue); color: var(--blue); background: var(--blue-dim); }
+.subtab.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+  .header { padding: 11px 15px; }
+  .header-title { font-size: 14px; }
+  .page  { padding: 14px 15px; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .kpi-value { font-size: 13px; }
+  .sec-head h2 { font-size: 15px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo">RSL</div>
+  <div>
+    <div class="header-title">공사 커맨드 센터</div>
+    <div class="header-sub">세종 어반아트리움 파인앤유 · 2026</div>
+  </div>
+  <div class="header-badge">● LIVE</div>
+</div>
+
+<!-- MAIN NAVIGATION -->
+<div class="nav-tabs">
+  <div class="nav-tab active" id="tab-r432" onclick="showTab('r432')">
+    <span class="dot"></span> 432호
+  </div>
+  <div class="nav-tab" id="tab-jackson" onclick="showTab('jackson')">
+    <span class="dot" style="background:var(--orange)"></span> 4층 잭슨나인스 원복
+  </div>
+  <div class="nav-tab" style="color:var(--muted);opacity:.4;cursor:default">+ 호실 추가</div>
+  <div class="nav-tab nav-tab-idx" id="tab-idx" onclick="showTab('idx')">📋 서식 인덱스</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE 1 · 서식 인덱스
+════════════════════════════════════════════════ -->
+<div id="page-idx" class="page">
+
+  <div class="sec-head" style="margin-top:8px">
+    <h2>공사계약·시공 문서 서식 인덱스</h2>
+    <span class="badge badge-blue">48종</span>
+    <span class="badge badge-green">A~I 9개 분류</span>
+  </div>
+
+  <!-- 요약 KPI -->
+  <div class="kpi-grid">
+    <div class="kpi-card kpi-blue">
+      <div class="kpi-label">총 서식 수</div>
+      <div class="kpi-value" style="color:var(--blue)">48</div>
+      <div class="kpi-sub">A~I 전 분류</div>
+    </div>
+    <div class="kpi-card kpi-green">
+      <div class="kpi-label">HTML 서식 완료</div>
+      <div class="kpi-value" style="color:var(--green)">22</div>
+      <div class="kpi-sub">클릭 즉시 사용</div>
+    </div>
+    <div class="kpi-card kpi-yellow">
+      <div class="kpi-label">준비 중</div>
+      <div class="kpi-value" style="color:var(--yellow)">26</div>
+      <div class="kpi-sub">제작 예정</div>
+    </div>
+    <div class="kpi-card kpi-orange">
+      <div class="kpi-label">현재 진행 공사</div>
+      <div class="kpi-value" style="color:var(--orange)">1</div>
+      <div class="kpi-sub">432호 (견적 단계)</div>
+    </div>
+  </div>
+
+  <!-- 서식 인덱스 테이블 -->
+  <div class="idx-wrap">
+    <table class="idx-table">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>분류</th>
+          <th>서식명</th>
+          <th>HTML</th>
+          <th>작성 시점</th>
+          <th>설명</th>
+        </tr>
+      </thead>
+      <tbody id="idx-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE 2 · 432호
+════════════════════════════════════════════════ -->
+<div id="page-r432" class="page active">
+
+  <!-- 호실 기본 정보 -->
+  <div class="info-grid" style="margin-top:8px">
+    <div class="info-card">
+      <h4>공사 기본 정보</h4>
+      <div class="info-row"><span class="k">호실</span><span class="v">432호</span></div>
+      <div class="info-row"><span class="k">공사명</span><span class="v">세종 어반아트리움</span></div>
+      <div class="info-row"><span class="k">업태</span><span class="v">인테리어 공사</span></div>
+      <div class="info-row"><span class="k">시공사</span><span class="v">큐브컴퍼니</span></div>
+      <div class="info-row"><span class="k">소요기간</span><span class="v">착공 후 최대 7일</span></div>
+    </div>
+    <div class="info-card">
+      <h4>4층 현황 이슈</h4>
+      <div class="info-row"><span class="k">대상</span><span class="v">427~434호 중 432호</span></div>
+      <div class="info-row"><span class="k">용도</span><span class="v">여성전용 마사지샵</span></div>
+      <div class="info-row"><span class="k">주의</span><span class="v" style="color:var(--orange)">무단 출입 금지</span></div>
+      <div class="info-row"><span class="k">이슈#2</span><span class="v">좌측 401~408 원복 필요</span></div>
+    </div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi-card kpi-blue">
+      <div class="kpi-label">견적 금액 (VAT 별도)</div>
+      <div class="kpi-value" style="color:var(--blue)">₩11.47M</div>
+      <div class="kpi-sub">VAT포함 ₩12,617,000</div>
+    </div>
+    <div class="kpi-card kpi-green">
+      <div class="kpi-label">예상 마진</div>
+      <div class="kpi-value" style="color:var(--green)">39.7%</div>
+      <div class="kpi-sub">₩4,552,450</div>
+    </div>
+    <div class="kpi-card kpi-yellow">
+      <div class="kpi-label">실행 원가</div>
+      <div class="kpi-value" style="color:var(--yellow)">₩6.92M</div>
+      <div class="kpi-sub">운영경비 7% 포함</div>
+    </div>
+    <div class="kpi-card kpi-orange">
+      <div class="kpi-label">계약금 (50%)</div>
+      <div class="kpi-value" style="color:var(--orange)">₩6.47M</div>
+      <div class="kpi-sub">중도금 30% · 잔금 20%</div>
+    </div>
+  </div>
+
+  <!-- 서류 진행 현황 -->
+  <div class="sec-head">
+    <h2>서류 진행 현황</h2>
+    <span class="badge badge-yellow">견적 단계</span>
+  </div>
+
+  <!-- 진행 타임라인 -->
+  <div class="timeline" style="margin-bottom:20px">
+    <div class="tl-item">
+      <div class="tl-line">
+        <div class="tl-dot done"></div>
+        <div class="tl-connector"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-label">A. 협의·설계 단계</div>
+        <div class="tl-meta">가견적서 · 견적서 · 공사내역서 완료</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-line">
+        <div class="tl-dot wip"></div>
+        <div class="tl-connector"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-label" style="color:var(--yellow)">B. 계약 체결 <span style="font-size:10px;opacity:.7">(현재 단계)</span></div>
+        <div class="tl-meta">공사도급계약서 서명 대기 중</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-line">
+        <div class="tl-dot"></div>
+        <div class="tl-connector"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-label" style="color:var(--muted)">C. 보증 서류</div>
+        <div class="tl-meta">계약이행보증서 · 선급금보증서</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-line">
+        <div class="tl-dot"></div>
+        <div class="tl-connector"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-label" style="color:var(--muted)">D~H. 시공 단계</div>
+        <div class="tl-meta">착공계 · 공정표 · 작업일보 등</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-line">
+        <div class="tl-dot"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-label" style="color:var(--muted)">I. 준공·하자</div>
+        <div class="tl-meta">준공계 · 검사확인서 · 하자보증</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 이슈 노트 -->
+  <div class="note-box">
+    <h4>⚠️ 현장 이슈 #1 · 432호</h4>
+    <p>여성전용 마사지샵 — 인테리어 실비용 확인 목적으로 방문. <strong>시설 상황 파악 후 실견적 확정</strong>.<br>
+    사람이 있으면 들어가지 말고 밖에서 눈으로만 판단할 것. (불필요한 자극 금지)</p>
+  </div>
+
+  <!-- 견적서 서브탭 -->
+  <div class="sec-head">
+    <h2>견적서 내역</h2>
+    <span class="badge badge-blue">CUBE-2026-432-Q001</span>
+    <span style="font-size:10px;color:var(--muted);margin-left:auto;font-family:var(--mono)">2026-03-17</span>
+  </div>
+
+  <!-- 서브탭 -->
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+    <button class="subtab active" onclick="showSub('est-client','this')">고객 견적서</button>
+    <button class="subtab" onclick="showSub('est-kpi','this')">원가 분석</button>
+  </div>
+
+  <div id="est-client">
+    <div class="est-table-wrap">
+      <table class="est-table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>구분</th>
+            <th>품명 및 내용</th>
+            <th>규격</th>
+            <th class="num">수량</th>
+            <th class="num">단가</th>
+            <th class="num">금액</th>
+            <th>비고</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="cat-row"><td colspan="8">경량공사</td></tr>
+          <tr><td>1</td><td>경량공사</td><td>석고 텍스</td><td>m²</td><td class="num money">25</td><td class="num money">33,000</td><td class="num money">825,000</td><td></td></tr>
+          <tr class="cat-row"><td colspan="8">목공사</td></tr>
+          <tr><td>2</td><td>목공사</td><td>가벽 공사</td><td>m²</td><td class="num money">23</td><td class="num money">75,000</td><td class="num money">1,725,000</td><td></td></tr>
+          <tr><td>3</td><td>목공사</td><td>기둥 마감</td><td>식</td><td class="num money">1</td><td class="num money">250,000</td><td class="num money">250,000</td><td></td></tr>
+          <tr><td>4</td><td>목공사</td><td>몰딩 마감</td><td>m</td><td class="num money">45</td><td class="num money">9,500</td><td class="num money">427,500</td><td></td></tr>
+          <tr class="cat-row"><td colspan="8">전기</td></tr>
+          <tr><td>5</td><td>전기</td><td>기본 전기 배선</td><td>m²</td><td class="num money">25</td><td class="num money">35,000</td><td class="num money">875,000</td><td></td></tr>
+          <tr><td>6</td><td>전기</td><td>조명 공사</td><td>식</td><td class="num money">15</td><td class="num money">35,000</td><td class="num money">525,000</td><td></td></tr>
+          <tr class="cat-row"><td colspan="8">바닥 마감</td></tr>
+          <tr><td>7</td><td>바닥 마감</td><td>에폭시 코팅</td><td>m²</td><td class="num money">25</td><td class="num money">33,000</td><td class="num money">825,000</td><td></td></tr>
+          <tr class="cat-row"><td colspan="8">커튼</td></tr>
+          <tr><td>8</td><td>커튼</td><td>암막</td><td>m²</td><td class="num money">10</td><td class="num money">70,000</td><td class="num money">700,000</td><td></td></tr>
+          <tr><td>9</td><td>커튼</td><td>쉬폰</td><td>m²</td><td class="num money">12</td><td class="num money">90,000</td><td class="num money">1,080,000</td><td></td></tr>
+          <tr class="cat-row"><td colspan="8">도배 마감</td></tr>
+          <tr><td>10</td><td>도배 마감</td><td>벽체 도배</td><td>m²</td><td class="num money">89</td><td class="num money">14,000</td><td class="num money">1,246,000</td><td></td></tr>
+          <tr class="cat-row"><td colspan="8">기타</td></tr>
+          <tr><td>11</td><td>폐기물</td><td>인테리어 공사후</td><td>m³</td><td class="num money">4</td><td class="num money">120,000</td><td class="num money">480,000</td><td></td></tr>
+          <tr><td>12</td><td>입주 청소</td><td>준공 후 전실 청소</td><td>m²</td><td class="num money">25</td><td class="num money">18,000</td><td class="num money">450,000</td><td></td></tr>
+          <tr class="total-row">
+            <td colspan="6">소 계</td>
+            <td class="num money">9,408,500</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="6" style="color:var(--muted)">운영경비 7%</td>
+            <td class="num money" style="color:var(--muted)">658,595</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="6" style="color:var(--muted)">기업마진 15%</td>
+            <td class="num money" style="color:var(--muted)">1,411,275</td>
+            <td></td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="6" style="font-size:13px">공급가액</td>
+            <td class="num money" style="font-size:14px;color:var(--blue)">11,470,000</td>
+            <td style="color:var(--muted);font-size:10px">천단위절삭</td>
+          </tr>
+          <tr>
+            <td colspan="6" style="color:var(--muted)">부가세 (10%)</td>
+            <td class="num money" style="color:var(--muted)">1,147,000</td>
+            <td></td>
+          </tr>
+          <tr class="total-row" style="background:var(--blue-dim)">
+            <td colspan="6" style="font-size:13px;color:var(--blue)">총 합계</td>
+            <td class="num money" style="font-size:15px;color:var(--blue)">12,617,000</td>
+            <td style="color:var(--muted);font-size:10px">VAT 포함</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- 대금 지급 조건 -->
+    <div class="info-grid">
+      <div class="info-card">
+        <h4>대금 지급 조건</h4>
+        <div class="info-row"><span class="k">계약금 50%</span><span class="v" style="color:var(--blue)">₩6,467,000</span></div>
+        <div class="info-row"><span class="k">중도금 30%</span><span class="v">₩3,880,200</span></div>
+        <div class="info-row"><span class="k">잔금 20%</span><span class="v">₩2,586,800</span></div>
+      </div>
+      <div class="info-card">
+        <h4>견적 조건</h4>
+        <div class="info-row"><span class="k">유효기간</span><span class="v">발행일 +30일</span></div>
+        <div class="info-row"><span class="k">작성일</span><span class="v">2026-03-17</span></div>
+        <div class="info-row"><span class="k">문서번호</span><span class="v" style="font-size:10px">CUBE-2026-432-Q001</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="est-kpi" style="display:none">
+    <div class="kpi-grid">
+      <div class="kpi-card" style="border-left:3px solid var(--blue)">
+        <div class="kpi-label">고객 견적</div>
+        <div class="kpi-value" style="color:var(--blue)">₩11.47M</div>
+        <div class="kpi-sub">VAT 별도</div>
+      </div>
+      <div class="kpi-card" style="border-left:3px solid var(--orange)">
+        <div class="kpi-label">실행 원가</div>
+        <div class="kpi-value" style="color:var(--orange)">₩6.92M</div>
+        <div class="kpi-sub">운영경비 포함</div>
+      </div>
+      <div class="kpi-card" style="border-left:3px solid var(--green)">
+        <div class="kpi-label">예상 마진</div>
+        <div class="kpi-value" style="color:var(--green)">₩4.55M</div>
+        <div class="kpi-sub">마진율 39.7%</div>
+      </div>
+    </div>
+    <!-- 마진율 프로그레스 -->
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px">
+        <span style="color:var(--muted)">마진율</span>
+        <span style="color:var(--green);font-weight:700;font-family:var(--mono)">39.7%</span>
+      </div>
+      <div class="progress-wrap"><div class="progress-bar" style="width:39.7%"></div></div>
+    </div>
+    <div class="est-table-wrap">
+      <table class="est-table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>공사 구분</th>
+            <th class="num">견적금액</th>
+            <th class="num">실행비용</th>
+            <th class="num">마진</th>
+            <th class="num">마진율</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>경량공사</td><td class="num money">2,550,000</td><td class="num money">2,080,000</td><td class="num money" style="color:var(--green)">470,000</td><td class="num" style="color:var(--green)">18.4%</td></tr>
+          <tr><td>2</td><td>목공사</td><td class="num money">677,500</td><td class="num money">280,000</td><td class="num money" style="color:var(--green)">397,500</td><td class="num" style="color:var(--green)">58.7%</td></tr>
+          <tr><td>3</td><td>전기</td><td class="num money">1,400,000</td><td class="num money">650,000</td><td class="num money" style="color:var(--green)">750,000</td><td class="num" style="color:var(--green)">53.6%</td></tr>
+          <tr><td>4</td><td>바닥 마감</td><td class="num money">825,000</td><td class="num money">450,000</td><td class="num money" style="color:var(--green)">375,000</td><td class="num" style="color:var(--green)">45.5%</td></tr>
+          <tr><td>5</td><td>커튼</td><td class="num money">1,780,000</td><td class="num money">1,340,000</td><td class="num money" style="color:var(--green)">440,000</td><td class="num" style="color:var(--green)">24.7%</td></tr>
+          <tr><td>6</td><td>도배 마감</td><td class="num money">1,246,000</td><td class="num money">890,000</td><td class="num money" style="color:var(--green)">356,000</td><td class="num" style="color:var(--green)">28.6%</td></tr>
+          <tr><td>7</td><td>폐기물</td><td class="num money">480,000</td><td class="num money">400,000</td><td class="num money" style="color:var(--green)">80,000</td><td class="num" style="color:var(--green)">16.7%</td></tr>
+          <tr><td>8</td><td>입주 청소</td><td class="num money">450,000</td><td class="num money">375,000</td><td class="num money" style="color:var(--green)">75,000</td><td class="num" style="color:var(--green)">16.7%</td></tr>
+          <tr class="total-row">
+            <td colspan="2">합계</td>
+            <td class="num money" style="color:var(--blue)">11,470,000</td>
+            <td class="num money" style="color:var(--orange)">6,917,550</td>
+            <td class="num money" style="color:var(--green)">4,552,450</td>
+            <td class="num" style="color:var(--green);font-weight:700">39.7%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 현장 사진 섹션 -->
+  <div class="sec-head" style="margin-top:28px">
+    <h2>현장 사진</h2>
+    <span class="badge badge-orange">클릭하여 추가</span>
+    <span style="font-size:10px;color:var(--muted);margin-left:auto">저장 위치: 로컬 (새로고침 시 초기화)</span>
+  </div>
+  <input type="file" id="photo-input" accept="image/*" multiple onchange="addPhotos(this.files)">
+  <div class="photo-drop" onclick="document.getElementById('photo-input').click()">
+    <div class="photo-drop-icon">📸</div>
+    <div>사진을 여기에 드래그하거나 <strong>클릭하여 추가</strong></div>
+    <div style="font-size:10px;margin-top:4px;font-family:var(--mono)">현장사진 · 착공전 · 공정별 · 준공 사진</div>
+  </div>
+  <div class="photo-grid" id="photo-grid-432"></div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE · 4층 잭슨나인스 원복
+════════════════════════════════════════════════ -->
+<div id="page-jackson" class="page">
+
+  <!-- 메인 헤드라인 배너 -->
+  <div style="
+    background: linear-gradient(135deg, #EBF2FF 0%, #F0F7FF 60%, #EBF5F0 100%);
+    border: 1px solid #C0D4F5;
+    border-left: 5px solid var(--orange);
+    border-radius: 10px;
+    padding: 20px 22px 18px;
+    margin: 12px 0 20px;
+    box-shadow: var(--shadow);
+  ">
+    <div style="font-size:16px;font-weight:700;line-height:2;color:var(--text);">
+      철거-준공시 기준 원복
+      <span style="color:var(--blue)">(이상 파인건설→잭슨나인스)</span>
+      ~
+      메타버스테마파크 최적화 원복(철거비 절감)
+      <span style="color:var(--teal)">(이상 메타버스테마파크)</span>
+    </div>
+    <div style="
+      margin-top:10px;
+      font-size:16px;font-weight:700;
+      color:var(--orange);letter-spacing:.5px;
+    ">401호~408호, 419호~426호</div>
+    <div style="margin-top:10px;font-size:12px;color:var(--muted);">
+      ✦ 원복: 임차인 원상복구 의무 이행 또는 발주자 지시에 의한 시공 이전 상태 복원
+    </div>
+  </div>
+
+  <!-- 서브탭 -->
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+    <button class="subtab active" id="jtab-issue" onclick="showJTab('issue',this)">📋 이슈 현황</button>
+    <button class="subtab" id="jtab-cost" onclick="showJTab('cost',this)">💰 실행경비</button>
+    <button class="subtab" id="jtab-check" onclick="showJTab('check',this)">✅ 체크리스트</button>
+    <button class="subtab" id="jtab-photo" onclick="showJTab('photo',this)">📸 현장사진</button>
+  </div>
+
+  <!-- ▶ 이슈 현황 -->
+  <div id="jtab-issue-body">
+    <div class="kpi-grid">
+      <div class="kpi-card" style="border-left:3px solid var(--orange)">
+        <div class="kpi-label">대상 호실</div>
+        <div class="kpi-value" style="color:var(--orange)">16개</div>
+        <div class="kpi-sub">401~408 · 419~426</div>
+      </div>
+      <div class="kpi-card" style="border-left:3px solid var(--yellow)">
+        <div class="kpi-label">이슈</div>
+        <div class="kpi-value" style="color:var(--yellow)">1건</div>
+        <div class="kpi-sub">잭슨나인스 방치 원복</div>
+      </div>
+      <div class="kpi-card" style="border-left:3px solid var(--blue)">
+        <div class="kpi-label">상태</div>
+        <div class="kpi-value" style="color:var(--blue);font-size:14px">견적 요청</div>
+        <div class="kpi-sub">현장 사진 촬영 필요</div>
+      </div>
+      <div class="kpi-card" style="border-left:3px solid var(--red)">
+        <div class="kpi-label">주의</div>
+        <div class="kpi-value" style="color:var(--red);font-size:14px">무단출입 금지</div>
+        <div class="kpi-sub">밖에서 눈으로만 확인</div>
+      </div>
+    </div>
+
+    <div class="sec-head">
+      <h2>4층 이슈 현황 파악</h2>
+    </div>
+    <div class="est-table-wrap" style="margin-bottom:20px">
+      <table class="est-table">
+        <thead>
+          <tr>
+            <th style="width:36px">No</th>
+            <th style="width:160px">이슈</th>
+            <th style="width:160px">필요 정보</th>
+            <th>내용</th>
+            <th>주의사항</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align:center;font-family:var(--mono);color:var(--yellow);font-weight:700">1</td>
+            <td>
+              <div style="font-weight:700;font-size:12px">좌측 401~408 / 419~426</div>
+            </td>
+            <td>
+              <div style="font-size:12px">① 현상태 사진촬영</div>
+              <div style="font-size:12px">② 예상 원복 비용</div>
+            </td>
+            <td style="font-size:12px;line-height:1.7">
+              기존 잭슨 나인스가 셀매장으로 사용하다가 원복하지 않고 방치한 상황
+            </td>
+            <td>
+              <div style="font-size:12px;color:var(--muted);line-height:1.7">
+                누가 왜 들어가냐고 물어보면 누가 원복 견적 좀 뽑아달라고 해서 왔다가 하시고
+                누구냐고 물어보면 답변주지 마세요.
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ▶ 실행경비 -->
+  <div id="jtab-cost-body" style="display:none">
+    <div class="sec-head">
+      <h2>잭슨 9 스노우 파크 철거 공사 견적서</h2>
+      <span class="badge badge-orange">대외비</span>
+    </div>
+
+    <!-- KPI 요약 -->
+    <div class="kpi-grid">
+      <div class="kpi-card" style="border-left:3px solid var(--orange)">
+        <div class="kpi-label">총 견적금액</div>
+        <div class="kpi-value" style="color:var(--orange)">₩16,825,000</div>
+        <div class="kpi-sub">VAT 별도</div>
+      </div>
+      <div class="kpi-card" style="border-left:3px solid var(--blue)">
+        <div class="kpi-label">인력비</div>
+        <div class="kpi-value" style="color:var(--blue)">₩9,000,000</div>
+        <div class="kpi-sub">36식 × 250,000</div>
+      </div>
+      <div class="kpi-card" style="border-left:3px solid var(--yellow)">
+        <div class="kpi-label">폐기물 처리</div>
+        <div class="kpi-value" style="color:var(--yellow)">₩5,475,000</div>
+        <div class="kpi-sub">골조 4,475 + 일반 1,000</div>
+      </div>
+      <div class="kpi-card" style="border-left:3px solid var(--muted)">
+        <div class="kpi-label">기타 (장비·보양·자재·경비)</div>
+        <div class="kpi-value" style="color:var(--sub)">₩2,350,000</div>
+        <div class="kpi-sub">4개 항목 합산</div>
+      </div>
+    </div>
+
+    <!-- 내역 테이블 -->
+    <div class="est-table-wrap">
+      <table class="est-table">
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th>단위</th>
+            <th class="num">물량</th>
+            <th class="num">단가</th>
+            <th class="num">금액</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:700">골조 폐기물</td>
+            <td style="color:var(--muted)">ton</td>
+            <td class="num">179</td>
+            <td class="num" style="color:var(--muted)">25,000</td>
+            <td class="num" style="font-weight:700">4,475,000</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700">일반 폐기물</td>
+            <td style="color:var(--muted)">ton</td>
+            <td class="num">25</td>
+            <td class="num" style="color:var(--muted)">40,000</td>
+            <td class="num" style="font-weight:700">1,000,000</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700">인력</td>
+            <td style="color:var(--muted)">식</td>
+            <td class="num">36</td>
+            <td class="num" style="color:var(--muted)">250,000</td>
+            <td class="num" style="font-weight:700;color:var(--blue)">9,000,000</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700">장비</td>
+            <td style="color:var(--muted)">HPC</td>
+            <td class="num">30</td>
+            <td class="num" style="color:var(--muted)">20,000</td>
+            <td class="num" style="font-weight:700">600,000</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700">보양</td>
+            <td style="color:var(--muted)">식</td>
+            <td class="num">1</td>
+            <td class="num" style="color:var(--muted)">350,000</td>
+            <td class="num" style="font-weight:700">350,000</td>
+          </tr>
+          <tr>
+            <td style="font-size:11px">
+              <span style="font-weight:700">보양</span>
+              <span style="color:var(--muted);display:block;font-size:10px">양중용 엘리베이터 보양</span>
+            </td>
+            <td style="color:var(--muted)">식</td>
+            <td class="num">1</td>
+            <td class="num" style="color:var(--muted)">350,000</td>
+            <td class="num" style="font-weight:700">350,000</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700">기타 자재</td>
+            <td style="color:var(--muted)">식</td>
+            <td class="num">1</td>
+            <td class="num" style="color:var(--muted)">500,000</td>
+            <td class="num" style="font-weight:700">500,000</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700">운용 경비</td>
+            <td style="color:var(--muted)">식</td>
+            <td class="num">1</td>
+            <td class="num" style="color:var(--muted)">900,000</td>
+            <td class="num" style="font-weight:700">900,000</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3"></td>
+            <td style="font-size:13px;font-weight:700;text-align:right;color:var(--sub)">total</td>
+            <td class="num" style="font-size:15px;font-weight:700;color:var(--orange)">16,825,000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="font-size:11px;color:var(--muted);padding:6px 4px;">
+      ✦ 본 견적서는 내부 원가관리용으로 외부 유출을 금합니다. [대외비 CONFIDENTIAL]
+    </div>
+  </div>
+
+  <!-- ▶ 체크리스트 -->
+  <div id="jtab-check-body" style="display:none">
+    <div class="sec-head">
+      <h2>원복 공사 서류 체크리스트</h2>
+      <span class="badge badge-yellow">진행 준비 중</span>
+    </div>
+    <div class="doc-list" style="margin-bottom:24px">
+      <div class="doc-item">
+        <div class="doc-num">01</div>
+        <div class="doc-name">현장 현황 사진 촬영</div>
+        <span class="status-pill status-wip">🔄 진행중</span>
+        <div class="doc-timing">즉시</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-num">02</div>
+        <div class="doc-name">원복 가견적서 (401~408호)</div>
+        <span class="status-pill status-pending">⬜ 미작성</span>
+        <div class="doc-timing">현장확인 후</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-num">03</div>
+        <div class="doc-name">원복 가견적서 (419~426호)</div>
+        <span class="status-pill status-pending">⬜ 미작성</span>
+        <div class="doc-timing">현장확인 후</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-num">04</div>
+        <div class="doc-name">공사 내역서 (철거 범위 명시)</div>
+        <span class="status-pill status-pending">⬜ 미작성</span>
+        <div class="doc-timing">견적 확정 후</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-num">05</div>
+        <div class="doc-name">공사도급계약서</div>
+        <span class="status-pill status-pending">⬜ 미작성</span>
+        <div class="doc-timing">계약 시</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-num">06</div>
+        <div class="doc-name">착공계 · 공정표</div>
+        <span class="status-pill status-pending">⬜ 미작성</span>
+        <div class="doc-timing">착공일</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-num">07</div>
+        <div class="doc-name">준공 사진 · 검사 확인서</div>
+        <span class="status-pill status-pending">⬜ 미작성</span>
+        <div class="doc-timing">준공 시</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ▶ 현장사진 -->
+  <div id="jtab-photo-body" style="display:none">
+    <div class="sec-head">
+      <h2>현장 사진</h2>
+      <span class="badge badge-orange">클릭하여 추가</span>
+    </div>
+    <input type="file" id="photo-input-jackson" accept="image/*" multiple
+      onchange="addPhotosTo(this.files,'photo-grid-jackson')">
+    <div class="photo-drop" onclick="document.getElementById('photo-input-jackson').click()"
+      ondragover="event.preventDefault()"
+      ondrop="event.preventDefault();addPhotosTo(event.dataTransfer.files,'photo-grid-jackson')">
+      <div class="photo-drop-icon">📸</div>
+      <div>현장 사진 드래그 또는 <strong>클릭하여 추가</strong></div>
+      <div style="font-size:10px;margin-top:4px;font-family:var(--mono)">현상태 사진 · 원복 전후 비교 · 공정별</div>
+    </div>
+    <div class="photo-grid" id="photo-grid-jackson"></div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE 3 · 504호 (플레이스홀더)
+════════════════════════════════════════════════ -->
+
+
+
+
+<script>
+/* ─── 탭 전환 ─────────────────────────────── */
+function showTab(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+/* ─── 서브탭 ──────────────────────────────── */
+function showSub(id) {
+  ['est-client','est-kpi'].forEach(s => document.getElementById(s).style.display='none');
+  document.getElementById(id).style.display = 'block';
+  document.querySelectorAll('.subtab').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+/* ─── 인덱스 데이터 ───────────────────────── */
+const IDX = [
+  { cat:'A. 협의·설계',  no:1,  name:'가견적서',          timing:'계약 협의 전',     html:true  },
+  { cat:'A. 협의·설계',  no:2,  name:'견적서',             timing:'계약 전',          html:true  },
+  { cat:'A. 협의·설계',  no:3,  name:'공사 내역서',        timing:'계약 전',          html:true  },
+  { cat:'A. 협의·설계',  no:4,  name:'시방서',             timing:'계약 전',          html:false },
+  { cat:'A. 협의·설계',  no:5,  name:'설계도면 일체',      timing:'계약 전',          html:false },
+  { cat:'B. 계약 체결',  no:6,  name:'공사도급계약서',     timing:'계약 시',          html:true  },
+  { cat:'B. 계약 체결',  no:7,  name:'계약 특수조건',      timing:'계약 시',          html:false },
+  { cat:'B. 계약 체결',  no:8,  name:'계약 일반조건',      timing:'계약 시',          html:false },
+  { cat:'B. 계약 체결',  no:9,  name:'공사이행각서',       timing:'계약 시',          html:true  },
+  { cat:'C. 보증 서류',  no:10, name:'계약이행보증서',     timing:'계약 시 동시',     html:true  },
+  { cat:'C. 보증 서류',  no:11, name:'선급금 보증서',      timing:'선급금 수령 전',   html:true  },
+  { cat:'C. 보증 서류',  no:12, name:'하자보수보증서',     timing:'준공 시',          html:true  },
+  { cat:'C. 보증 서류',  no:13, name:'지급보증서',         timing:'하도급 계약 시',   html:true  },
+  { cat:'C. 보증 서류',  no:14, name:'공사손해보험',       timing:'착공 전',          html:false },
+  { cat:'C. 보증 서류',  no:15, name:'근로자재해보상보험', timing:'착공 전',          html:false },
+  { cat:'D. 착공 서류',  no:16, name:'착공계',             timing:'착공일',           html:true  },
+  { cat:'D. 착공 서류',  no:17, name:'현장대리인 지정서',  timing:'착공 전',          html:true  },
+  { cat:'D. 착공 서류',  no:18, name:'공사계획서',         timing:'착공 전',          html:false },
+  { cat:'D. 착공 서류',  no:19, name:'공정표',             timing:'착공 전',          html:true  },
+  { cat:'D. 착공 서류',  no:20, name:'안전관리계획서',     timing:'착공 전',          html:true  },
+  { cat:'D. 착공 서류',  no:21, name:'환경관리계획서',     timing:'착공 전',          html:false },
+  { cat:'D. 착공 서류',  no:22, name:'작업원 명부',        timing:'착공 전/변경 시',  html:false },
+  { cat:'E. 재정·기성',  no:23, name:'선급금 지급 신청서', timing:'착공 후',          html:true  },
+  { cat:'E. 재정·기성',  no:24, name:'선급금 사용 내역서', timing:'기성 청구 시',     html:false },
+  { cat:'E. 재정·기성',  no:25, name:'기성금 청구서',      timing:'기성 시점',        html:true  },
+  { cat:'E. 재정·기성',  no:26, name:'기성 내역서',        timing:'기성 청구 시',     html:false },
+  { cat:'E. 재정·기성',  no:27, name:'세금계산서',         timing:'기성·준공 정산 시',html:false },
+  { cat:'E. 재정·기성',  no:28, name:'정산서',             timing:'준공 후',          html:false },
+  { cat:'F. 공사 중',    no:29, name:'작업일보',           timing:'매일',             html:true  },
+  { cat:'F. 공사 중',    no:30, name:'공정 보고서',        timing:'주간/월간',        html:false },
+  { cat:'F. 공사 중',    no:31, name:'공사 지시서',        timing:'필요 시',          html:false },
+  { cat:'F. 공사 중',    no:32, name:'현장 회의록',        timing:'회의 시',          html:false },
+  { cat:'F. 공사 중',    no:33, name:'민원 처리 대장',     timing:'민원 발생 시',     html:false },
+  { cat:'G. 변경 계약',  no:34, name:'설계변경 요청서',    timing:'공사 중',          html:true  },
+  { cat:'G. 변경 계약',  no:35, name:'변경 내역서',        timing:'변경 합의 시',     html:false },
+  { cat:'G. 변경 계약',  no:36, name:'변경계약서',         timing:'변경 합의 후',     html:true  },
+  { cat:'H. 품질·안전',  no:37, name:'품질관리계획서',     timing:'착공 전',          html:false },
+  { cat:'H. 품질·안전',  no:38, name:'자재 승인 신청서',   timing:'자재 반입 전',     html:true  },
+  { cat:'H. 품질·안전',  no:39, name:'검수체크리스트',     timing:'공정마다',         html:true  },
+  { cat:'H. 품질·안전',  no:40, name:'품질시험 성과표',    timing:'시험 시',          html:false },
+  { cat:'H. 품질·안전',  no:41, name:'안전점검표',         timing:'매일/주간',        html:false },
+  { cat:'I. 준공·하자',  no:42, name:'준공계',             timing:'공사 완료 시',     html:true  },
+  { cat:'I. 준공·하자',  no:43, name:'준공도서',           timing:'준공 시',          html:false },
+  { cat:'I. 준공·하자',  no:44, name:'검사 신청서',        timing:'준공계 제출 시',   html:false },
+  { cat:'I. 준공·하자',  no:45, name:'준공 검사 확인서',   timing:'검사 후',          html:false },
+  { cat:'I. 준공·하자',  no:46, name:'하자보수 이행각서',  timing:'준공 시',          html:true  },
+  { cat:'I. 준공·하자',  no:47, name:'하자보수 신청서',    timing:'하자 발생 시',     html:false },
+  { cat:'I. 준공·하자',  no:48, name:'하자보수 완료 확인서',timing:'보수 완료 후',    html:false },
+];
+
+function buildIndex() {
+  const tb = document.getElementById('idx-body');
+  let cur = '';
+  IDX.forEach(d => {
+    if (d.cat !== cur) {
+      const sep = document.createElement('tr');
+      sep.className = 'cat-sep';
+      sep.innerHTML = `<td colspan="6">${d.cat}</td>`;
+      tb.appendChild(sep);
+      cur = d.cat;
+    }
+    const tr = document.createElement('tr');
+    const pill = d.html
+      ? '<span class="status-pill status-done">✔ 서식있음</span>'
+      : '<span class="status-pill status-pending">준비중</span>';
+    tr.innerHTML = `
+      <td style="font-family:var(--mono);color:var(--muted)">${String(d.no).padStart(2,'0')}</td>
+      <td style="font-size:10px;color:var(--muted)">${d.cat.split('.')[0]}.</td>
+      <td style="font-weight:700">${d.name}</td>
+      <td>${pill}</td>
+      <td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${d.timing}</td>
+      <td></td>`;
+    tb.appendChild(tr);
+  });
+}
+buildIndex();
+
+/* ─── 잭슨나인스 서브탭 ──────────────────── */
+function showJTab(id, btn) {
+  ['issue','cost','check','photo'].forEach(s => {
+    document.getElementById('jtab-'+s+'-body').style.display = 'none';
+    document.getElementById('jtab-'+s).classList.remove('active');
+  });
+  document.getElementById('jtab-'+id+'-body').style.display = 'block';
+  btn.classList.add('active');
+}
+
+function addPhotosTo(files, gridId) {
+  const grid = document.getElementById(gridId);
+  Array.from(files).forEach(f => {
+    const url  = URL.createObjectURL(f);
+    const item = document.createElement('div');
+    item.className = 'photo-item';
+    const label = f.name.replace(/\.[^.]+$/,'').slice(0,20);
+    item.innerHTML = `
+      <img src="${url}" alt="${label}">
+      <div class="photo-label">${label}</div>
+      <button class="photo-del" onclick="this.parentElement.remove()">×</button>`;
+    item.onclick = (e) => { if(e.target.classList.contains('photo-del')) return; window.open(url,'_blank'); };
+    grid.appendChild(item);
+  });
+}
+function addPhotos(files) { addPhotosTo(files, 'photo-grid-432'); }
+/* 드래그&드롭 */
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('.photo-drop').addEventListener('dragover', e => e.preventDefault());
+  document.querySelector('.photo-drop').addEventListener('drop', e => {
+    e.preventDefault();
+    addPhotos(e.dataTransfer.files);
+  });
+});
+</script>
+</body>
+</html>
