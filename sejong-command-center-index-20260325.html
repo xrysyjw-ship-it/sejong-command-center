@@ -446,6 +446,24 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
   transition:opacity .15s,transform .1s,box-shadow .2s;
 }
 .bf-confirm-btn:hover{opacity:.9;transform:scale(1.02);}
+.bf-screenshot-btn {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.7); padding: 10px 16px; border-radius: 8px;
+  font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;
+  transition: background .15s;
+}
+.bf-screenshot-btn:hover { background: rgba(255,255,255,0.15); color:#fff; }
+
+/* 인쇄(스크린샷)용 — 브리핑만 표시 */
+@media print {
+  body > *:not(#briefPrintArea) { display: none !important; }
+  #briefPrintArea {
+    display: block !important; position: static !important;
+    background: #fff; color: #000; padding: 20px;
+  }
+  #briefPrintArea * { color: #000 !important; background: #fff !important; border-color: #ccc !important; }
+  #briefingOverlay { display: none !important; }
+}
 
 /* ── LEGEND BAR ── */
 .legend-bar {
@@ -926,8 +944,11 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 
     </div>
     <div class="brief-card-ftr">
-      <div class="bf-note"><strong>SEJONG_CONTRACT_SEED v5</strong> · RSL 내부 업무용 / 대외비<br>확인 시 오늘 하루 동안 다시 표시되지 않습니다.</div>
-      <button class="bf-confirm-btn" id="bfConfirmBtn" onclick="confirmBriefing()">✅ &nbsp;확인 완료 — 오늘 다시 보지 않기</button>
+      <div class="bf-note"><strong>SEJONG_CONTRACT_SEED v5</strong> · RSL 내부 업무용 / 대외비<br>확인 후 → <strong style="color:#FFB800">대대행계약 탭</strong>으로 이동합니다.</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
+        <button class="bf-screenshot-btn" onclick="printBriefing()">📸 스크린샷</button>
+        <button class="bf-confirm-btn" id="bfConfirmBtn" onclick="confirmBriefing()">✅ 확인 완료</button>
+      </div>
     </div>
   </div>
 </div>
@@ -4116,17 +4137,79 @@ ${JSON.stringify(st.sections)}
 
 /* ── BRIEFING POPUP JS ── */
 (function(){
-  const BF_KEY = 'briefing_20260325_001';
+  const BF_KEY = 'briefing_20260325_002';
   const today = new Date().toISOString().slice(0,10);
   if(localStorage.getItem(BF_KEY) !== today){
     document.getElementById('briefingOverlay').classList.add('open');
   }
+
   window.confirmBriefing = function(){
     localStorage.setItem(BF_KEY, today);
     const ov = document.getElementById('briefingOverlay');
     ov.style.transition='opacity .4s'; ov.style.opacity='0';
-    setTimeout(()=>{ ov.classList.remove('open'); ov.style.opacity=''; }, 400);
+    setTimeout(()=>{
+      ov.classList.remove('open'); ov.style.opacity='';
+      // 대대행계약 탭으로 이동 후 해당 섹션 하이라이트
+      if(typeof switchTab === 'function') switchTab('agency');
+      setTimeout(()=>{
+        const target = document.getElementById('panel-agency');
+        if(target){
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+          // 잠깐 하이라이트 효과
+          target.style.transition = 'box-shadow .3s';
+          target.style.boxShadow = '0 0 0 3px rgba(232,119,34,0.8), 0 0 40px rgba(232,119,34,0.3)';
+          setTimeout(()=>{ target.style.boxShadow = ''; }, 2000);
+        }
+      }, 200);
+    }, 400);
   };
+
+  window.printBriefing = function(){
+    // 팝업 내용을 새 창으로 열어 프린트(스크린샷) 유도
+    const content = document.querySelector('.brief-card').innerHTML;
+    const win = window.open('', '_blank', 'width=760,height=900');
+    win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+      <title>브리핑 20260325-001</title>
+      <style>
+        body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#0D1F35;padding:20px;margin:0;}
+        .brief-card{background:#0D1F35;border:1px solid rgba(255,255,255,0.12);border-radius:14px;overflow:hidden;}
+        .brief-card-hdr{background:#1a3050;border-bottom:2px solid #E87722;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+        .bc-left{display:flex;align-items:center;gap:9px;}
+        .bc-badge{background:#E87722;color:#fff;font-size:9px;font-weight:900;letter-spacing:1.5px;padding:3px 8px;border-radius:3px;}
+        .bc-title{font-size:14px;font-weight:800;color:#fff;}
+        .bc-meta{font-size:10px;color:rgba(255,255,255,0.4);}
+        .brief-card-body{padding:18px 20px;}
+        .bf-sec{margin-bottom:14px;border:1px solid rgba(255,255,255,0.08);border-radius:7px;overflow:hidden;}
+        .bf-sec-hdr{padding:8px 12px;font-size:10.5px;font-weight:800;}
+        .bf-sec-body{padding:10px 12px;}
+        .sa .bf-sec-hdr{background:rgba(74,144,217,.18);color:#7AB8F5;}
+        .sb .bf-sec-hdr{background:rgba(232,119,34,.18);color:#F0A060;}
+        .sm .bf-sec-hdr{background:rgba(46,204,113,.18);color:#5DE89A;}
+        .sw .bf-sec-hdr{background:rgba(231,76,60,.18);color:#F07060;}
+        .bf-tbl{width:100%;border-collapse:collapse;font-size:10.5px;}
+        .bf-tbl td{padding:6px 9px;color:rgba(255,255,255,.83);border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top;line-height:1.55;}
+        .bf-tbl tr:last-child td{border-bottom:none;}
+        .bk{color:rgba(255,255,255,.4);font-size:10px;width:120px;}
+        .bhl{color:#FFB800;font-weight:700;}.bred{color:#FF6B6B;font-weight:700;}.bblu{color:#7AB8F5;}
+        .bf-ms{display:flex;gap:9px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:10.5px;}
+        .bf-ms:last-child{border-bottom:none;}
+        .bf-ms-d{color:#FFB800;font-weight:700;white-space:nowrap;min-width:85px;}
+        .bf-ms-desc{color:rgba(255,255,255,.8);line-height:1.5;}
+        .bf-tag{display:inline-block;font-size:8.5px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:4px;}
+        .bf-tag.today{background:#FF6B6B;color:#fff;}.bf-tag.up{background:rgba(255,184,0,.2);color:#FFB800;}
+        .bf-caut{display:flex;gap:7px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:10.5px;color:rgba(255,255,255,.8);line-height:1.5;}
+        .bf-caut:last-child{border-bottom:none;}
+        .cd{color:#FF6B6B;flex-shrink:0;}
+        .brief-card-ftr{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.08);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+        .bf-note{font-size:10px;color:rgba(255,255,255,.35);line-height:1.5;}
+        .bf-note strong{color:rgba(255,255,255,.5);}
+        .bf-screenshot-btn,.bf-confirm-btn{display:none;}
+        @media print{body{background:#fff;}*{color:#000!important;background:#fff!important;border-color:#ccc!important;}}
+      </style></head><body>${content}</body></html>`);
+    win.document.close();
+    setTimeout(()=>win.print(), 500);
+  };
+
   // 스크롤 끝 → 버튼 강조
   const body = document.getElementById('briefCardBody');
   if(body) body.addEventListener('scroll', function(){
